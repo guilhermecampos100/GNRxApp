@@ -285,7 +285,7 @@ var app = {
 				// em vez de inserir vazio, deve inserir null 
 				var sql = "INSERT INTO checklist_gui (token, codigooriginal, descricao, secaopai, tipo, ordenacao,  codigo, atualizouservidor, imagemanexa, hierarquia, infracao) VALUES ('"+checklist_secoes[i].token+"','"+checklist_secoes[i].codigo+"','"+checklist_secoes[i].descricao+"','"+checklist_secoes[i].secaopai+"','"+checklist_secoes[i].tipo+"','"+checklist_secoes[i].ordenacao+"','" + checklist_secoes[i].codigo + "',1,'"+checklist_secoes[i].anexo+"','"+checklist_secoes[i].hierarquia+"',"+checklist_secoes[i].infracao+")";
 				tx.executeSql(sql,[], function(tx, res) {
-					$scope.conta_atualizando = cont;
+					$scope.conta_atualizando = cont + 3;
 					cont++;
 				
 					if (cont == checklist_secoes.length - 1) {
@@ -467,10 +467,15 @@ var app = {
 		$scope.nenhumItemEncontrado = false
 		
 
-		if (page.options.busca != undefined) {
+		$scope.buscar = function(index) {
+			$rootScope.busca = $scope.busca
+			atualizaoffline();
+		}
+		
+	/* 	if (page.options.busca != undefined) {
 			var busca = page.options.busca;
 			$scope.busca = page.options.busca;
-		} 
+		}  */
 		
 		/* if ($rootScope.busca != undefined) {
 			var busca = $rootScope.busca;
@@ -1159,7 +1164,7 @@ var app = {
 		}
 		
 		// APAGA SEÇÃO
-		$scope.apagachecklist = function(index) {
+		$scope.apagasecao = function(index) {
 				var result = confirm('Confirma exlusão da seção ' + $scope.secaoPai.descricao + ', suas subseções, fotos e informações?');
 				if (result ){
  						db.transaction(function(tx) {
@@ -1169,14 +1174,28 @@ var app = {
 						});
 						var a=1;
  					//$scope.MeuNavigator.pushPage('escolhechecklist.html',{secaoPai: '', animation: 'slide'});
- 
-					//pegasecoes(codigo, entidade, 'deletar');
+ 					//pegasecoes(codigo, entidade, 'deletar');
 					//apagaItensSecao(codigo, entidade)
 					VoltaSecaoAvo();
 				}
-
 		}
 
+		
+		// APAGA CHECKLIST INTEIRO
+		$scope.apagachecklist = function(index) {
+				var result = confirm('Confirma exlusão de toda inspeção ' + $rootScope.nomechecklist + ', suas subseções, fotos e informações?');
+				if (result ){
+ 						db.transaction(function(tx) {
+							tx.executeSql('DELETE FROM  check_cab WHERE token = ? ',[$rootScope.tokenGlobal]);
+							tx.executeSql('DELETE FROM  checklist_gui WHERE token = ? ',[$rootScope.tokenGlobal]);
+							tx.executeSql('DELETE FROM  checklist_fotos WHERE token = ? ',[$rootScope.tokenGlobal]);
+						});
+					$scope.VoltaTopo();
+					alert('Inspeção apagada, recarregue a tela');
+				}
+		}
+		
+		
 		// APAGA FOTO
 		$scope.apagafotosecao = function() {
 			var result = confirm('deseja apagar a foto?');

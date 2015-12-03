@@ -10,7 +10,7 @@
 	</gap:config-file>
 	
 	
-    <name>GNRX 1.100 </name>
+    <name>GNRX 1.101 </name>
 	<icon src="icon.png" />
 	<gap:splash src="splash.png" />
 	

@@ -13,7 +13,7 @@
 	<ons-toolbar-button ng-click="VoltaTopo()">
 	<ons-icon icon="fa-home"></ons-toolbar-button>
 	
-	<ons-toolbar-button ng-show="secaoPai.codigo != undefined && secaoPai.codigo != ''" ng-click="PaginaConfig()">
+	<ons-toolbar-button ng-click="PaginaConfig()">
 	<ons-icon icon="fa-gear"></ons-toolbar-button>
 	</div>
 	</ons-toolbar>
@@ -39,6 +39,17 @@ text-decoration: underline;
 </style>
 	
 	<ons-list >
+		<ons-list-item class="lista_cinza">
+		<ons-row>
+			<ons-col width=12%>
+				<span>&nbsp; <ons-icon icon="fa-search"> &nbsp; </span>
+			</ons-col>
+			<ons-col width=88%>
+					<input name=busca ng-model=busca size=20><button ng-click="buscar()">buscar</button>
+			</ons-col>						
+		</ons-row>
+	</ons-list-item>
+	
 	<ons-list-item ng-show="nenhumItemEncontrado"> Nenhum item encontrado.
 	</ons-list-item>
 	<ons-list-item  name={{secao.codigo}} modifier="chevron" class="{{classelista(secao.tipo, secao.entidade)}}"  ng-repeat="secao in secoes track by $index" >
