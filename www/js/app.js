@@ -1561,6 +1561,8 @@ var app = {
 		$scope.token = $rootScope.tokenGlobal;
 		var page = MeuNavigator.getCurrentPage();
 		
+		$scope.ios = ons.platform.isIOS();
+		
 		$scope.voltarDeItemAvulso = false
 		$scope.criandoNovoItemAvulso = false
 		$scope.inserindoobs = false;

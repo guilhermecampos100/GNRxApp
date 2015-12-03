@@ -6,13 +6,7 @@
     <div class="center" ng-show="busca == undefined || busca == ''"><span compile="secaoPai.descricao"></span></div>
 	<div class="center" ng-show="busca != undefined && busca != ''">busca: {{$scope.busca}}</div>
 	<div class="right">
-	
-	<ons-toolbar-button ng-click="refresca()">
-	<ons-icon icon="fa-refresh"></ons-toolbar-button>
-	
-	<ons-toolbar-button ng-click="VoltaTopo()">
-	<ons-icon icon="fa-home"></ons-toolbar-button>
-	
+
 	<ons-toolbar-button ng-click="PaginaConfig()">
 	<ons-icon icon="fa-gear"></ons-toolbar-button>
 	</div>
@@ -45,7 +39,7 @@ text-decoration: underline;
 				<span><font style="font-size: 13px"> &nbsp; <ons-icon icon="fa-search"> &nbsp; </font></span></center> </section>
 			</ons-col>
 			<ons-col width=85%>
-					<input name=busca ng-model=busca style="width: 50%"> <button ng-click="buscar()">buscar</button>
+					<input name=busca ng-model=busca style="width: 50%"> <button ng-click="buscar()">buscar</button> <span style="float: right; font-size:14px; color:#1284ff;"> <span ng-click="refresca()">	<ons-icon icon="fa-refresh"></span> &nbsp; <span ng-click="VoltaTopo()"> <ons-icon icon="fa-home"></span></span>
 			</ons-col>						
 		</ons-row>
 	</ons-list-item>
