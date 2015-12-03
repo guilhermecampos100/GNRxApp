@@ -10,12 +10,12 @@
 	</gap:config-file>
 	
 	
-    <name>GNRX 2.803 </name>
+    <name>GNRX 1.100 </name>
 	<icon src="icon.png" />
 	<gap:splash src="splash.png" />
 	
     <description>
-    NRX
+    GNRX App
     </description>
 
 	<author href="http://chamagar.com" email="guilhermecampos100@gmail.com">
