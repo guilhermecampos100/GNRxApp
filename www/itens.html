@@ -71,17 +71,17 @@
 				</ons-col>
 			</ons-row>
 			<ons-row>
-				<ons-col width=16% style="margin-right: 3px">
-					<button class="button button--large" style="background-color:#cccccc;" ng-click="cancelaobservacao()">Cancelar</button>
+				<ons-col width=16% style="margin-right: 5px">
+					<button class="button" style="background-color:#cccccc; font-size:14px;" ng-click="cancelaobservacao()"> <ons-icon icon="fa-times"></ons-icon> Cancelar </button>&nbsp;
 				</ons-col>
-				<ons-col width=16% style="margin-right: 3px">
-					<button class="button button--large"  style="background-color:#cccccc;" ng-click="limpaobservacao()">Limpar</button>
+				<ons-col width=16% style="margin-right: 5px">
+					<button class="button"  style="background-color:#cccccc; font-size:14px;" ng-click="limpaobservacao()"> <ons-icon icon="fa-eraser"></ons-icon> Limpar </button>
 				</ons-col>
-				<ons-col width=40% style="margin-right: 3px">
-					<button name="btnregistrar" id="btnregistrar" class="button button--large" ng-click="gravaobservacao()">Registrar</button>
+				<ons-col width=40% style="margin-right: 5px">
+					<button name="btnregistrar" id="btnregistrar" class="button" ng-click="gravaobservacao()" style="width: 80%"> Gravar </button>
 				</ons-col>
 				<ons-col width=20%>
-					<span ng-show="!ouvindo"><button class="button button--large" id="button" ng-click="recognizeSpeech();"> &nbsp; <ons-icon icon="fa-microphone" ></ons-icon> Ditar </h3></button></span>
+					<span ng-show="!ouvindo"><button class="button" id="button" ng-click="recognizeSpeech();"> &nbsp; <ons-icon icon="fa-microphone" ></ons-icon> Ditar </h3></button></span>
 				</ons-col>
 			</ons-row>
         </ons-list-item>
@@ -119,17 +119,17 @@
 				</ons-col>
 			</ons-row>
 			<ons-row>
-				<ons-col width=16% style="margin-right: 3px">
-					<button class="button button--large" style="background-color:#cccccc;" ng-click="cancelalocal()">Cancelar</button>
+				<ons-col width=16% style="margin-right: 5px">
+					<button class="button" style="background-color:#cccccc; font-size:14px;" ng-click="cancelalocal()"> <ons-icon icon="fa-times"></ons-icon> Cancelar </button> &nbsp;
 				</ons-col>
-				<ons-col width=16% style="margin-right: 3px">
-					<button class="button button--large"  style="background-color:#cccccc;" ng-click="limpalocal()">Limpar</button>
+				<ons-col width=16% style="margin-right: 5px">
+					<button class="button"  style="background-color:#cccccc; font-size:14px;" ng-click="limpalocal()"> <ons-icon icon="fa-eraser"></ons-icon> Limpar </button>
 				</ons-col>
-				<ons-col width=40% style="margin-right: 3px">
-					<button name="btnregistrar" id="btnregistrar" class="button button--large" ng-click="gravalocal()">Registrar</button>
+				<ons-col width=40% style="margin-right: 5px">
+					<button name="btnregistrar" id="btnregistrar" class="button" ng-click="gravalocal()"  style="width: 80%"> Gravar </button>
 				</ons-col>
 				<ons-col width=20% ng-show="false">
-					<span ng-show="!ouvindo"><button class="button button--large" id="button" ng-click="recognizeSpeech();"> &nbsp; <ons-icon icon="fa-microphone" ></ons-icon> Ditar </h3></button></span>
+					<span ng-show="!ouvindo"><button class="button" id="button" ng-click="recognizeSpeech();"> &nbsp; <ons-icon icon="fa-microphone" ></ons-icon> Ditar </h3></button></span>
 				</ons-col>
 			</ons-row>
         </ons-list-item>

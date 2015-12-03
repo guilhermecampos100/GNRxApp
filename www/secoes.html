@@ -41,10 +41,10 @@ text-decoration: underline;
 	<ons-list >
 		<ons-list-item class="lista_cinza">
 		<ons-row>
-			<ons-col width=12%> <section><center>
+			<ons-col width=15%> <section><center>
 				<span><font style="font-size: 13px"> &nbsp; <ons-icon icon="fa-search"> &nbsp; </font></span></center> </section>
 			</ons-col>
-			<ons-col width=88%>
+			<ons-col width=85%>
 					<input name=busca ng-model=busca style="width: 50%"> <button ng-click="buscar()">buscar</button>
 			</ons-col>						
 		</ons-row>
@@ -54,7 +54,7 @@ text-decoration: underline;
 	</ons-list-item>
 	<ons-list-item  name={{secao.codigo}} modifier="chevron" class="{{classelista(secao.tipo, secao.entidade)}}"  ng-repeat="secao in secoes track by $index" >
 		<ons-row>
-			<ons-col width=12%>
+			<ons-col width=15%>
 			    <section><center>
 				<!-- SECAO -->
 				<span ng-show="secao.tipo == 'secao'">
@@ -73,15 +73,15 @@ text-decoration: underline;
 				<span ng-show="secao.obs != undefined && secao.obs != ''" style="font-size:10px; color:#1284ff;"><ons-icon icon="fa-comment" ></ons_icon></span>				
                 </center></section>
 			</ons-col>
-			<ons-col width=78% ng-click="showDetail($index)" >
-			    <section>
+			<ons-col width=75% ng-click="showDetail($index)" >
+			    <section><font style="font-size:14px">
 				<span ng-show="secao.tipo == 'secao'"><b><span ng-show="exibirnumerador == true">{{$index + 1}}  - </span> <span ng-show="exibircodigonorma == true">{{secao.codigo}}  - </span> <span compile="secao.descricaocomglossario"></span> (<span style="color:{{corRespondidos(secao.respondidos, secao.totalitens)}}">{{secao.respondidos}}/{{secao.totalitens}}</span>)</b> &nbsp; <a id="imagemanexa" href="#" ng-show="secao.imagemanexa" ng-click="abrepagina(secao.imagemanexa);"> veja imagem </a></span>
 				<span ng-show="secao.tipo == 'item'"><span ng-show="exibirnumerador == true">{{$index + 1}}  - </span> <span ng-show="exibircodigonorma == true">{{secao.codigo}} - </span><span compile="secao.descricaocomglossario"></span> &nbsp; <a id="imagemanexa" href="#" ng-show="secao.imagemanexa" ng-click="abrepagina(secao.imagemanexa);"> veja imagem </a> <font color=red>I({{secao.infracao}})</font></span>
 				
-				
+				</font>
                 </section>
 			</ons-col>		
-			<ons-col width=10%>
+			<ons-col width=9%>
 			    <section>
 			
                 </section>
