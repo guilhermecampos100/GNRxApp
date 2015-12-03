@@ -1,0 +1,97 @@
+<ons-page ng-controller="ObservacaoController">
+    
+    <ons-toolbar>
+    <div class="left"><ons-back-button>Voltar</ons-back-button></div>
+    <div class="center">{{secaoPai.descricao}}</div>
+	<div class="right"><ons-toolbar-button ng-click="VoltaTopo()">
+	<ons-icon icon="fa-home"></ons-toolbar-button></div>
+	</ons-toolbar>
+	
+<style>
+
+#tituloitem
+{
+    background-color: white;
+    line-height: normal; 
+    padding-bottom: 10px   !important;
+    padding-top: 10px;
+}
+.obs
+{
+    width: 100%;
+    margin-top: 10px;
+    height: 150px;
+}	
+</style>
+<ons-list >
+	<ons-list-item id="tituloitem">
+		<ons-row>
+			<ons-col>
+			   <b>{{secaoPai.descricao}}</b>
+			</ons-col>						
+		</ons-row>
+	</ons-list-item>
+	
+	<ons-list-header> <ons-icon icon="fa-comment"></ons-icon> Observação <span ng-show="(url_foto != undefined)"> Foto </span></ons-list-header>
+	    <ons-list-item ng-show="(url_foto != undefined)">
+		<ons-row>
+			<ons-col width="25%" style="padding: 10px 10px 10px 10px;"><img ng-src={{url_foto}}></ons-col>
+			<ons-col width="75%">
+				<textarea class="obs" name="observacao" ng-model="observacao" cols=40 rows=4></textarea><br>
+			</ons-col>
+		</ons-row>
+		<ons-row>
+			<ons-col width=75% style="margin-right: 3px">
+				<button class="button button--large" ng-click="gravaobservacao()">Registrar</button>
+			</ons-col>
+			<ons-col width=20%>
+				<span ng-show="!ouvindo"><button class="button button--large" id="button" ng-click="toggleStartStop();"> &nbsp; <ons-icon icon="fa-microphone" ></ons-icon> Ditar </h3></button></span>
+				<span ng-show="ouvindo"><button class="button button--large" style="background-color:red" id="button" ng-click="toggleStartStop();"> &nbsp; <ons-icon icon="fa-microphone" ></ons-icon> Parar</h3></button></span>
+			</ons-col>
+			
+		</ons-row>
+        </ons-list-item>
+		
+		<ons-list-item ng-show="(url_foto == undefined)">
+		<ons-row>
+			<ons-col width="100%">
+				<textarea class="obs" name="observacao" ng-model="observacao" cols=40 rows=4></textarea><br>
+				<!-- <button class="button button--large" ng-click="gravaobservacao()">Registrar</button> -->
+			</ons-col>
+		</ons-row>
+		<ons-row>
+			<ons-col width=75% style="margin-right: 3px">
+				<button class="button button--large" ng-click="gravaobservacao()">Registrar</button>
+			</ons-col>
+			<ons-col width=20%>
+				<span ng-show="!ouvindo"><button class="button button--large" id="button" ng-click="Ditar();"> &nbsp; <ons-icon icon="fa-microphone" ></ons-icon> Ditar </h3></button></span>
+				
+			</ons-col>
+        </ons-list-item>
+		
+		
+	<!-- 		<textarea  ng-model="observacao2" rows=5 cols=80></textarea>
+			<button id="button" ng-click="toggleStartStop()">TESTE SPEECH RECOGNITION</button>
+ -->
+  
+  
+		
+</ons-list>
+		
+		<center>
+		<br>	
+		<span ng-show="ouvindo"><button class="button button--large" style="background-color:red; width:80%" id="button" ng-click="PararDitado();"> &nbsp; <ons-icon icon="fa-microphone fa-spin" ></ons-icon> Finalizar Ditado</h3></button></span>		
+		<br><br>
+
+		<button class="button" ng-click="recognizeSpeech();"> <h3> &nbsp; <ons-icon icon="fa-microphone" ></ons-icon> &nbsp; </h3></button> &nbsp; 
+		
+<br><br>
+
+<span ng-show="!ouvindo"><button class="button" style="background-color:grey; width:80%" id="button" ng-click="reseta();"> &nbsp; reseta R.Voz 1</button></span>
+
+
+		</center>
+		
+
+</ons-page>
+

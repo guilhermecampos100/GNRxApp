@@ -1,0 +1,82 @@
+<ons-page ng-controller="SecoesController">
+
+    <ons-toolbar>
+    <div class="left"><!-- <ons-toolbar-button ng-click="voltar()">
+	<ons-icon icon="fa-chevron-left"><font style="font-size:14px"> Voltar </font></ons-toolbar-button> --><ons-back-button>Voltar</ons-back-button></div>
+    <div class="center" ng-show="busca == undefined || busca == ''"><span compile="secaoPai.descricao"></span></div>
+	<div class="center" ng-show="busca != undefined && busca != ''">busca: {{$scope.busca}}</div>
+	<div class="right">
+	
+	<ons-toolbar-button ng-click="refresca()">
+	<ons-icon icon="fa-refresh"></ons-toolbar-button>
+	
+	<ons-toolbar-button ng-click="VoltaTopo()">
+	<ons-icon icon="fa-home"></ons-toolbar-button>
+	
+	<ons-toolbar-button ng-show="secaoPai.codigo != undefined && secaoPai.codigo != ''" ng-click="PaginaConfig()">
+	<ons-icon icon="fa-gear"></ons-toolbar-button>
+	</div>
+	</ons-toolbar>
+
+<style>
+.lista_amarela {
+  background-color: gold;
+  width=100%;
+  height=100%;
+}
+
+.lista_verde {
+ /*  background-color: lightgreen; */
+  background-color: #FFF700; 
+  width=100%;
+  height=100%;
+}
+
+.linkglo {
+color: blue;
+text-decoration: underline;
+}
+</style>
+	
+	<ons-list >
+	<ons-list-item ng-show="nenhumItemEncontrado"> Nenhum item encontrado.
+	</ons-list-item>
+	<ons-list-item  name={{secao.codigo}} modifier="chevron" class="{{classelista(secao.tipo, secao.entidade)}}"  ng-repeat="secao in secoes track by $index" >
+		<ons-row>
+			<ons-col width=10%>
+			    <section><center>
+				<!-- SECAO -->
+				<span ng-show="secao.tipo == 'secao'">
+					<span ng-show="secao.fotosecao != undefined"><img ng-src="{{caminhofoto + secao.fotosecao}}" style="width:80%"></span>
+					<span ng-show="secao.fotosecao == undefined"><ons-icon icon="fa-folder-o" ></ons_icon></span>
+				</span>
+				<!-- ITEM -->
+				<span ng-show="secao.tipo == 'item'" style="color:{{coricone(secao.conforme)}}" ng-click="mudaconformidade(secao.conforme, secao.codigo, $index)">
+				<button ng-show="secao.conforme == undefined || secao.conforme == '' " class='btn btn-xs' style='background-color:lightgrey; color:black; font-size:10px;'> &nbsp; <i class='fa fa-question'> </i>  &nbsp;  </button>
+				<button ng-show="secao.conforme == 'sim' " class='btn btn-xs' style='background-color:green; color:white; font-size:10px;'>sim</button>
+				<button ng-show="secao.conforme == 'nao' " class='btn btn-xs' style='background-color:red; color:white; font-size:10px;'>não</button>
+				</span> 
+				<br>
+				<span ng-show="secao.qtd_fotos > 0 && secao.tipo=='item'" style="font-size:10px; color:#1284ff;"><ons-icon icon="fa-camera" ></ons_icon></span>
+				<span ng-show="secao.latitude != undefined && secao.latitude != ''" style="font-size:10px; color:#1284ff;"><ons-icon icon="fa-map-marker" ></ons_icon></span>
+				<span ng-show="secao.obs != undefined && secao.obs != ''" style="font-size:10px; color:#1284ff;"><ons-icon icon="fa-comment" ></ons_icon></span>				
+                </center></section>
+			</ons-col>
+			<ons-col width=80% ng-click="showDetail($index)" >
+			    <section>
+				<span ng-show="secao.tipo == 'secao'"><b><span ng-show="exibirnumerador == true">{{$index + 1}}  - </span> <span ng-show="exibircodigonorma == true">{{secao.codigo}}  - </span> <span compile="secao.descricaocomglossario"></span> (<span style="color:{{corRespondidos(secao.respondidos, secao.totalitens)}}">{{secao.respondidos}}/{{secao.totalitens}}</span>)</b> &nbsp; <a id="imagemanexa" href="#" ng-show="secao.imagemanexa" ng-click="abrepagina(secao.imagemanexa);"> veja imagem </a></span>
+				<span ng-show="secao.tipo == 'item'"><span ng-show="exibirnumerador == true">{{$index + 1}}  - </span> <span ng-show="exibircodigonorma == true">{{secao.codigo}} - </span><span compile="secao.descricaocomglossario"></span> &nbsp; <a id="imagemanexa" href="#" ng-show="secao.imagemanexa" ng-click="abrepagina(secao.imagemanexa);"> veja imagem </a> <font color=red>I({{secao.infracao}})</font></span>
+				
+				
+                </section>
+			</ons-col>		
+			<ons-col width=10%>
+			    <section>
+			
+                </section>
+			</ons-col>						
+		</ons-row>
+	</ons-list-item>
+
+</ons-page>
+

@@ -1,0 +1,70 @@
+<ons-page ng-controller="ConfigController">
+    
+    <ons-toolbar>
+		<div class="left"><ons-back-button>Voltar</ons-back-button></div></div>
+		<div class="center">Duplicar</div>
+		<div class="right"></div>
+	</ons-toolbar>
+
+	<br>
+	<ons-list-header> Seção </ons-list-header><br>
+	
+	<ons-list-item  modifier="tappable" >
+		<ons-row>
+			<ons-col width=100%>
+			{{secaoPai.descricaoPai}}<br><br>
+		</ons-col>
+	 </ons-row>
+	</ons-list-item>
+	<ons-list-item  ng-click="clonasecao('secao')" modifier="chevron" class="lista_cinza">
+		<ons-row>
+			<ons-col width=12%>
+				<span>&nbsp; <ons-icon icon="ion-ios-browsers-outline"> &nbsp; </span>
+			</ons-col>
+			<ons-col width=88%>
+					Duplicar Seção
+			</ons-col>						
+		</ons-row>
+	</ons-list-item>	
+	
+<br><br>
+	
+	<ons-list-header> Item </ons-list-header><br>
+		<ons-list-item modifier="tappable" >
+		<ons-row>
+			<ons-col>
+			<span compile="secaoPai.descricao"></span><br><br>
+			</ons-col>						
+		</ons-row>
+	</ons-list-item>
+
+	
+	<ons-list-item  ng-click="clonasecao('item');" modifier="chevron" class="lista_cinza">
+		<ons-row>
+			<ons-col width=12%>
+				<span>&nbsp; <ons-icon icon="fa-trash-o"> &nbsp; </span>
+			</ons-col>
+			<ons-col width=88%>
+					Duplicar Item
+			</ons-col>						
+		</ons-row>
+	</ons-list-item>	
+<style>
+
+.lista_cinza {
+  background-color: #c0c0c0;
+  width=100%;
+  height=100%;
+}
+
+.lista_vermelha {
+  background-color: red;
+  width=100%;
+  height=100%;
+}
+</style>
+	
+</ons-page>
+
+
+

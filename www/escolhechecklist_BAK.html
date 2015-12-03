@@ -1,0 +1,105 @@
+<ons-page ng-controller="EscolheChecklistController">
+    
+    <ons-toolbar>
+    <div class="left"><ons-back-button>Voltar</ons-back-button></div>
+    <div class="center">Escolhe Checklist</div>
+	</ons-toolbar>
+
+<style>
+
+.lista_amarela {
+  background-color: gold;
+  width=100%;
+  height=100%;
+  
+}
+
+.lista_azul {
+  background-color: lightblue;
+  width=100%;
+  height=100%;
+  
+}
+
+.lista_cinza {
+  background-color: #dddddd;
+  width=100%;
+  height=100%;
+  
+}
+
+.lista_normal {
+	line-height: 23px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+
+</style>
+	
+<ons-list >
+<ons-list-header> Checklists j? baixados </ons-list-header>
+	<ons-list-item class="lista_cinza" >
+		<ons-row>
+			Nenhum checklist baixado para o app
+		</ons-row>
+	</ons-list>
+
+
+	<ons-list-item modifier="chevron" class="lista_azul" ng-repeat="item in checklists | filter: {importado: true}" ng-click="entrasecoes(item.token, item.descricao)">
+		<ons-row>
+			<ons-col width=10%>
+			    <section>
+				<span ><ons-icon icon="fa-circle" ></ons_icon></span>
+                </section>
+			</ons-col>
+			<ons-col width=80%>
+			    <section>
+				<span><b>{{item.descricao}} </b></span><br>
+				<span style="font-size:10px">DATA LIMITE: {{item.datalimite}}</span>
+                </section>
+			</ons-col>		
+			<ons-col width=10%>
+			    <section>
+			
+                </section>
+			</ons-col>						
+		</ons-row>
+	</ons-list-item>
+</ons-list>
+<br>&nbsp;<br>
+<ons-list>
+	<ons-list-header> Checklists para baixar</ons-list-header>
+	<ons-list-item class="lista_cinza" >
+		<ons-row>
+			Nenhum checklist dispon?vel no servidor para download
+		</ons-row>
+	</ons-list>
+	
+	<ons-list-item modifier="chevron" class="lista_cinza" ng-repeat="item in checklists | filter:{importado: false}" ng-click="importaChecklist(item.token, item.descricao)" >
+		<ons-row>
+			<ons-col width=10%>
+			    <section>
+				<span ><ons-icon icon="fa-download" ></ons_icon></span>
+                </section>
+			</ons-col>
+			<ons-col width=80%>
+			    <section>
+				<span><b>{{item.descricao}}</b></span>
+				<br>
+				<span style="font-size:10px">DATA LIMITE: {{item.datalimite}}</span>
+                </section>
+			</ons-col>		
+			<ons-col width=10%>
+			    <section>
+			
+                </section>
+			</ons-col>						
+		</ons-row>
+	</ons-list-item>
+</ons-list>	
+
+
+	
+</ons-page>
+

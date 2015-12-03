@@ -1,0 +1,103 @@
+﻿<ons-navigator var="MeuNavigator" >
+
+<ons-page ng-controller="EscolheChecklistController">
+ 
+    <ons-toolbar>
+    <div class="left"></div>
+    <div class="center">Inspeções</div>
+	<div class="right">
+		<ons-toolbar-button ng-click="refresca()">
+			<ons-icon icon="fa-refresh"></ons-toolbar-button>
+	</div>
+	</ons-toolbar>
+<style>
+
+.lista_amarela {
+  background-color: gold;
+  width=100%;
+  height=100%;
+  
+}
+
+.lista_azul {
+  background-color: lightblue;
+  width=100%;
+  height=100%;
+  
+}
+
+.lista_cinza {
+  background-color: #dddddd;
+  width=100%;
+  height=100%;
+  
+}
+
+.lista_normal {
+	line-height: 23px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+
+</style>
+	
+<ons-list >
+
+
+<ons-list-item  ng-click="criarnova()" modifier="chevron" class="lista_cinza" ng-show="false">
+	<ons-row>
+		<ons-col width=12%>
+			<span>&nbsp; <ons-icon icon="ion-ios-browsers-outline"> &nbsp; </span>
+		</ons-col>
+		<ons-col width=88%>
+				Criar nova inspeção
+		</ons-col>						
+	</ons-row>
+</ons-list-item>
+<br>
+<center>
+<ons-row >
+	<ons-col width="100%"> 
+	<div style="width: 80%; text-align: center;">
+	 <button class="button button--large" ng-click="criarnova()">Criar nova Inspeção</button>	
+	 </div>
+	<br>
+	</ons-col>
+</ons-row>
+</center>	
+<ons-list-header> Inspeções Criadas </ons-list-header><br>
+&nbsp; &nbsp; <font style="font-size:12px">Clique abaixo para entrar<br>
+	<ons-list-item class="lista_cinza" ng-show="!temchecklistlocal"  >
+		<ons-row>
+			Nenhum checklist baixado para o app
+		</ons-row>
+	</ons-list>
+
+
+	<ons-list-item modifier="chevron" class="lista_azul" ng-repeat="item in checklists | filter: {importado: true}" ng-click="entrasecoes($index)">
+		<ons-row>
+			<ons-col width=10%>
+			    <section>
+				<span ><ons-icon icon="fa-circle" ></ons_icon></span>
+                </section>
+			</ons-col>
+			<ons-col width=80%>
+			    <section>
+				<span><b>{{item.nome}} </b></span><br>
+				<span style="font-size:10px">MODELO: <b>{{item.modelo}}</b></span><br>
+				<span style="font-size:10px">CRIACAO: <b>{{item.datacriacao}} </b> &nbsp; LOCAL: <b> {{item.local}} </b></span>
+                </section>
+			</ons-col>		
+			<ons-col width=10%>
+			    <section>
+			
+                </section>
+			</ons-col>						
+		</ons-row>
+	</ons-list-item>
+</ons-list>
+
+</ons-page>
+</ons-navigator>   	
+

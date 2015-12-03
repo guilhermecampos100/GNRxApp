@@ -1,0 +1,44 @@
+<ons-page ng-controller="ImportaController">
+    
+    <ons-toolbar>
+		<div class="left"><ons-back-button>Voltar</ons-back-button></div>
+		<div class="center">Baixar Checklist</div>
+		<div class="right">
+		<ons-toolbar-button ng-click="VoltaTopo()">
+		<ons-icon icon="fa-home"></ons-toolbar-button></div>
+	</ons-toolbar>
+
+
+
+	  
+
+
+    <br><center>
+		 <ons-list modifier="inset" style="margin-top: 10px; line-height:normal; width:80%; ">
+        <ons-list-item class="to-wrapper">
+          <ons-row>
+		  Clique em importar para baixar o checklist para o dispositivo: <b>{{nomechecklist}}</b>  Isto permitirá trabalhar offline, sem conexão com a internet.
+	
+		</ons-row>
+		</ons-list-item>
+	</ons-list>
+	<br>
+	
+    <div class="main-image-wrapper">
+    <i class="fa fa-download main-image"></i>
+    </div>
+	<div>
+    <button class="button login-button" ng-click="AtualizaBanco()">Importar</button>
+    <br>
+	
+	
+	<span ng-show="atualizando"><h1><i class="fa fa-circle-o-notch fa-spin"></i> {{conta_atualizando}}/{{total_itens}}</h1></span>
+
+	</center>
+	
+
+	
+</ons-page>
+
+
+

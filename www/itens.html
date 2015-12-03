@@ -1,0 +1,241 @@
+<ons-page ng-controller="ItensController">
+    
+    <ons-toolbar>
+    <div class="left"><ons-toolbar-button ng-click="VoltaSecoes()" ng-show="!criandoNovoItemAvulso"><ons-icon icon="fa-chevron-left"></ons-icon> voltar </ons-toolbar-button></div>
+    <div class="center"></div>
+	<div class="right"></div>
+	</ons-toolbar>
+	
+<style>
+
+#tituloitem
+{
+    background-color: white;
+    line-height: normal; 
+    padding-bottom: 10px   !important;
+    padding-top: 10px;
+}
+
+
+</style>
+	
+	
+	
+	<ons-list style="border-bottom: 0px;">
+	
+	<ons-list-item id="tituloitem">
+		<ons-row>
+			<ons-col>
+				<b>{{secaoPai.codigo}} <span compile="descricaoitem"></span></b><br>
+				&nbsp; <a id="imagemanexa" href="#" ng-show="secao.imagemanexa" ng-click="abrepagina(secao.imagemanexa);"> veja imagem </a> 
+				&nbsp;<button class="btn btn-xs" ng-click="duplicar()" ng-show="!voltarDeItemAvulso" > <ons-icon icon="ion-ios-browsers-outline" size="13px" fixed-width="false"></ons-icon> Duplicar </button>
+			</ons-col>						
+		</ons-row>
+	</ons-list-item>
+	
+
+	
+	    <ons-list-item modifier="tappable">
+	<section ng-show="criandoNovoItemAvulso == false">
+		<ons-list-header>Conformidade</ons-list-header>
+		<table><td>
+          <label class="radio-button radio-button--list-item">
+            <input type="radio" name="conformidade" ng-model="conformidade" value="sim" ng-click="verificavalor()">
+            <div class="radio-button__checkmark radio-button--list-item__checkmark"></div>
+            Sim
+          </label>   </td><td>
+		
+		  <label class="radio-button radio-button--list-item">
+            <input type="radio" name="conformidade" ng-model="conformidade" value="nao" ng-click="verificavalor()">
+            <div class="radio-button__checkmark radio-button--list-item__checkmark"></div>
+            Não
+          </label>  <!--  </td><td>
+		  <label class="radio-button radio-button--list-item">
+            <input type="radio" name="conformidade" ng-model="conformidade" value="nao se aplica" ng-click="verificavalor()">
+            <div class="radio-button__checkmark radio-button--list-item__checkmark"></div>
+            Não Aplica
+          </label>   --> </td><td>
+          <label class="radio-button radio-button--list-item">
+            <input type="radio" name="conformidade" ng-model="conformidade" value="" ng-click="verificavalor()">
+            <div class="radio-button__checkmark radio-button--list-item__checkmark"></div>
+            N/R
+          </label>   </td></table>	 	  
+	</section>	  
+	<ons-list-header> Observação </ons-list-header>	
+	
+		<ons-list-item ng-show="inserindoobs == true">
+			<ons-row>
+				<ons-col width="100%">
+					<textarea class="obs" name="observacao" ng-model="observacao" style="width:100%; font-size: large;" rows=4></textarea><br>
+					<!-- <button class="button button--large" ng-click="gravaobservacao()">Registrar</button> -->
+				</ons-col>
+			</ons-row>
+			<ons-row>
+				<ons-col width=16% style="margin-right: 3px">
+					<button class="button button--large" style="background-color:#cccccc;" ng-click="cancelaobservacao()">Cancelar</button>
+				</ons-col>
+				<ons-col width=16% style="margin-right: 3px">
+					<button class="button button--large"  style="background-color:#cccccc;" ng-click="limpaobservacao()">Limpar</button>
+				</ons-col>
+				<ons-col width=40% style="margin-right: 3px">
+					<button name="btnregistrar" id="btnregistrar" class="button button--large" ng-click="gravaobservacao()">Registrar</button>
+				</ons-col>
+				<ons-col width=20%>
+					<span ng-show="!ouvindo"><button class="button button--large" id="button" ng-click="recognizeSpeech();"> &nbsp; <ons-icon icon="fa-microphone" ></ons-icon> Ditar </h3></button></span>
+				</ons-col>
+			</ons-row>
+        </ons-list-item>
+		
+		<ons-list-item ng-show="inserindoobs == false && txtobservacao != undefined && txtobsevacao != ''"  ng-click="inserirobservacao()" >		
+			<ons-row style="line-height: normal;">
+				<ons-col width=5%> &nbsp;
+				</ons-col>
+				<ons-col width=95%>
+					<b>{{txtobservacao}}</b>
+				</ons-col>
+			</ons-row>   
+		</ons-list-item>	
+		
+		<ons-list-item modifier="tappable" ng-show="inserindoobs == false"  ng-click="inserirobservacao()" >
+			<ons-row ng-show="true">
+				<ons-col width=5%>
+				</ons-col>
+				<ons-col width=95%>
+					<button class="btn btn-xs"> <ons-icon icon="fa-comment" size="13px" fixed-width="false"></ons-icon> Insere/Altera Observação </button>
+				</ons-col>						
+			</ons-row>			
+		</ons-list-item>
+		
+
+			
+	<section ng-show="criandoNovoItemAvulso == false">
+		<ons-list-header> Local </ons-list-header>	
+	
+		<ons-list-item ng-show="inserindolocal == true">
+			<ons-row>
+				<ons-col width="100%">
+					<br>
+					<input type=text  name="local" ng-model="local"size=40><br><br>
+				</ons-col>
+			</ons-row>
+			<ons-row>
+				<ons-col width=16% style="margin-right: 3px">
+					<button class="button button--large" style="background-color:#cccccc;" ng-click="cancelalocal()">Cancelar</button>
+				</ons-col>
+				<ons-col width=16% style="margin-right: 3px">
+					<button class="button button--large"  style="background-color:#cccccc;" ng-click="limpalocal()">Limpar</button>
+				</ons-col>
+				<ons-col width=40% style="margin-right: 3px">
+					<button name="btnregistrar" id="btnregistrar" class="button button--large" ng-click="gravalocal()">Registrar</button>
+				</ons-col>
+				<ons-col width=20% ng-show="false">
+					<span ng-show="!ouvindo"><button class="button button--large" id="button" ng-click="recognizeSpeech();"> &nbsp; <ons-icon icon="fa-microphone" ></ons-icon> Ditar </h3></button></span>
+				</ons-col>
+			</ons-row>
+        </ons-list-item>
+		
+		<ons-list-item ng-show="inserindolocal == false && txtlocal != undefined && txtlocal != ''"  ng-click="inserirlocal()" >		
+			<ons-row style="line-height: normal;">
+				<ons-col width=5%> &nbsp;
+				</ons-col>
+				<ons-col width=95%>
+					<b>{{txtlocal}}</b>
+				</ons-col>
+			</ons-row>   
+		</ons-list-item>	
+		
+		<ons-list-item modifier="tappable" ng-show="inserindolocal == false"  ng-click="inserirlocal()" >
+			<ons-row ng-show="true">
+				<ons-col width=5%>
+				</ons-col>
+				<ons-col width=95%>
+					<button class="btn btn-xs">Insere/Altera Local </button>
+				</ons-col>						
+			</ons-row>			
+		</ons-list-item>	
+	
+
+		<ons-row ng-show="false">
+			<ons-col width="100%"><br>
+				&nbsp; <input type=text name="local" ng-model="local" size=40 ngblur="gravalocal()"> &nbsp; <button class='btn btn-xs' style='background-color:lightgrey; color:black; font-size:12px;' ng-click="gravalocal()"> alterar</button>
+			</ons-col>
+		</ons-row>
+
+		<ons-list-item modifier="tappable" >
+			<ons-row>
+				<ons-col width=5%><center>
+					<span style="color: {{cor_icone_gps()}}">
+					   <ons-icon icon="fa-map-marker" size="20px" fixed-width="false" ng-show="!obtendo_gps && latitude != undefined"> </ons-icon>
+					   <ons-icon icon="refresh" size="14px" spin="true" fixed-width="true" ng-show="obtendo_gps"></ons-icon>
+					</span></center>
+				</ons-col>
+				<ons-col width=95%>
+						<button class="btn btn-xs" ng-click="acao('gps','')" > Marcar Geolocalização (GPS) </button><span ng-show="latitude != undefined" style="font-size: small;"> Lat: {{latitude}} Lon: {{longitude}} </span>
+				</ons-col>						
+			</ons-row>
+		</ons-list-item>	
+
+
+
+	
+		<ons-list-header>Fotos</ons-list-header>
+
+
+		<ons-list-item modifier="tappable" >
+			<ons-row>
+				<ons-col width=5%><center>
+					<span style="color: {{cor_icone_foto()}}" ng-show="false">
+					
+					</span></center>
+				</ons-col>
+				<ons-col width=95%>
+						<button class="btn btn-xs" ng-click="acao('fotos','','')" > <ons-icon icon="fa-camera" size="13px" fixed-width="false">	</ons-icon> Registrar nova foto</button
+				</ons-col>						
+			</ons-row>
+		</ons-list-item>
+	
+
+	</section>
+
+
+		<!--FOTOS -->
+		<section style="padding: 10px;">
+        <div ng-repeat="foto in fotos | orderBy:'url'">
+        <ons-row style="padding: 0 0 10px 0;">
+            <ons-col width=25%>
+                <section style="padding: 0 10px 0 0;">
+                <img ng-src="{{foto.url}}" alt="{{foto.observacao}}" ng-click="abrefoto(foto.url)" width=100% />
+                </section>
+            </ons-col>
+            <ons-col width=75%>
+                <section>
+                <h3 class="title" ng-click="showDetail($index)">Foto {{$index + 1}}</h3>
+				<p ng-show="foto.observacao != undefined"><Xons-icon icon="fa-comment" style="font-size:16px; color:#1284ff;" ></Xons-icon> {{foto.observacao}}</p>
+                </section>
+				<!-- mostra os botoes com texto so na primeira foto pra testar qual opcao é melhor -->
+				<div ng-show="$index == 99">
+				<button class="button" ng-click="acao('observacao', foto.url, foto.observacao)"> <ons-icon icon="fa-comment" ></ons-icon>
+			    Obs Foto</button><br><br>
+				<button class="button" ng-click="acao('trocarfoto', foto.url, '')"> <ons-icon icon="fa-camera" ></ons-icon>
+			    Trocar Foto</button><br><br>
+				<button class="button" style="background-color:red;" ng-click="acao('apagarfoto', foto.url, '')"> <ons-icon icon="fa-trash-o" ></ons-icon>
+			    Apagar Foto/Obs</button>
+				</div>
+				
+				<div ng-show="$index != 99">
+				<button class="button" ng-click="acao('observacao', foto.url, foto.observacao)"> <ons-icon icon="fa-comment" ></ons-icon></button>
+				<button class="button" ng-click="acao('trocarfoto', foto.url, '')"> <ons-icon icon="fa-camera" ></ons-icon></button>
+				<button class="button" style="background-color:red;" ng-click="acao('apagarfoto', foto.url, '')"> <ons-icon icon="fa-trash-o" ></ons-icon></button>
+
+				</div>
+				
+            </ons-col>
+        </ons-row>
+        </div>
+		</section>
+	
+	<div style="text-align: center">
+
+  </div>
+	
+</ons-page>

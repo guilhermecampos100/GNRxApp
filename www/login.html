@@ -1,0 +1,21 @@
+<ons-page ng-controller="loginController">
+    <ons-toolbar>
+    <div class="center">GNR-x</div>
+    </ons-toolbar>
+
+    <div class="main-image-wrapper">
+    <i class="fa fa-sign-in main-image"></i>
+    </div>
+	<div>
+	
+
+	<form ng-submit="fazerLogin(login, senha)">
+    <input type="text" ng-model="login" class="text-input--underbar classlogin" placeholder="Login" value="">
+    <br>
+	<input type="password" ng-model="senha" class="text-input--underbar classlogin" placeholder="Senha" value="">
+    <br>
+    <button class="button login-button">Entrar</button>
+    <br>
+	</form>
+
+</ons-page>

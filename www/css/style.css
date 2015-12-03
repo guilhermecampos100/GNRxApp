@@ -1,0 +1,361 @@
+@font-face {
+  font-family: "Source Sans Pro";
+  src: url("../font/SourceSansPro-Regular.ttf");
+}
+
+@font-face {
+  font-family: "Source Sans Pro";
+  src: url("../font/SourceSansPro-Italic.ttf");
+  font-style:italic;
+}
+
+@font-face {
+  font-family: "Open Sans";
+  src: url("../font/SourceSansPro-Light.ttf");
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: "Source Sans Pro";
+  src: url("../font/SourceSansPro-LightItalic.ttf");
+  font-weight: 300;
+  font-style:italic;
+}
+
+@font-face {
+  font-family: "Source Sans Pro";
+  src: url("../font/SourceSansPro-Bold.ttf");
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: "Source Sans Pro";
+  src: url("../font/SourceSansPro-BoldItalic.ttf");
+  font-weight: 600;
+  font-style:italic;
+}
+
+*, .navigation-bar, input, .text-input, .textarea, input[type=email], input[type=password], .button, .button--quiet, .search-input, .modal__content {
+  font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, Verdana, sans-serif;
+}
+
+.subtitle { margin:0 0 10px 0; font-size:14px }
+
+.social { font-size:12px; padding: 0 0 2px 0; }
+
+.social i { padding:0 5px 0 0; }
+
+.rn-carousel-control {
+    font-size:50px !important;
+    color:white;
+    opacity: 1;
+}
+
+img { max-width: 100%; height:auto; }
+
+iframe { max-width: 100%; }
+
+.map img { max-width: inherit!important; }
+
+.right.col { text-align: right; padding:0 10px 0 0; }
+
+h2.title, h3.title { margin:0; }
+
+.products h3.title { margin-top:10px; }
+
+.products .views-row { margin-bottom:10px; }
+
+.products .views-row:nth-child(odd) { padding-right:5px; }
+
+.products .views-row:nth-child(even) { padding-left:5px; }
+
+.tags, .categories { font-size:12px; margin:5px 0 15px 0; }
+
+p.post-excerpt { margin-top:5px; }
+
+img.post-teaser-image { float:left; padding:20px 20px 10px 0; }
+
+.post-teaser { padding:0; float:right; }
+
+.post-show-more, .load-show-more { display:block; }
+
+.status-bar-icon, .more-icon { padding:0 10px 0 0; }
+
+.post-submitted { font-size:12px; }
+
+.post-url { padding:20px 0 0 0; clear:both; display: inline-block; }
+
+/* ons-icon { opacity:0.7; } */
+
+.status-bar { margin: 10px -10px; } .status-bar.feeds { margin-top:0; } .status-message { padding:10px 0!important; }
+
+/* Share functionality */
+.button-share { margin:0 0 15px 0; }
+
+/* List */
+.list-top {
+    margin-top: -1px;
+}
+
+/* Carousel */
+.rn-carousel-indicator { margin-top:-5px; max-width:100%; box-sizing: border-box; }
+
+li.rn-carousel-slide div.content {
+    box-sizing: border-box;
+    position:absolute;
+    bottom:5px;
+    background:rgba(0,0,0,0.7);
+    color:white;
+    font-size:16px;
+    width:100%;
+    padding:10px;
+    overflow: hidden;
+}
+
+.rn-carousel-container { max-width:100%; box-sizing: border-box; }
+
+.rn-carousel-control.rn-carousel-control-next:before {
+content: "\f105"; font-family: 'FontAwesome';
+}
+
+.rn-carousel-control.rn-carousel-control-prev:before {
+content: "\f104 "; font-family: 'FontAwesome';
+}
+
+/* Login */
+div.float-left {
+    float: left;
+}
+
+.text-centering {
+    text-align: center;
+}
+
+.font-weight-500 {
+    font-weight: 500;
+}
+
+.main-image-wrapper {
+    text-align: center;
+    opacity: 0.2;
+    height: 180px;
+    margin: 30px 0;
+}
+
+.main-image {
+    font-size: 150px;
+    line-height: 200px;
+}
+
+input[type=email], input[type=password] {
+    display: block;
+    width: 80%;
+    height: 48px;
+    margin: 0 auto;
+    font-size: 19px;
+    outline: none;
+    line-height: 48px;
+}
+
+
+.classlogin {
+    display: block;
+    width: 80%;
+    height: 48px;
+    margin: 0 auto;
+    font-size: 19px;
+    outline: none;
+    line-height: 48px;
+}
+
+
+.login-button {
+    display: block;
+    width: 80%;
+    margin: 0 auto 0 auto;
+    font-size: 18px;
+}
+
+.forgot-password {
+    display: block;
+    margin: 8px auto 0 auto;
+    font-size: 14px;
+}
+
+/* Grid Menu */
+.grid-menu {
+    width: 100%;
+    
+}
+
+.float-left {
+    float: left;
+}
+
+.centering-and-alignment {
+    display: box;
+    display: -ms-box;
+    display: -moz-box;
+    display: -o-box;
+    display: -webkit-box;
+    box-align: center;
+    -ms-box-align: center;
+    -moz-box-align: center;
+    -o-box-align: center;
+    -webkit-box-align: center;
+    box-pack: center;
+    -ms-box-pack: center;
+    -moz-box-pack: center;
+    -o-box-pack: center;
+    -webkit-box-pack: center;
+}
+
+.grid-menu-item {
+    width: 50%;
+    height: 100%;
+    min-width: 100px;
+    min-height: 150px;
+    margin: 0;
+    padding: 0;
+    border-left: 1px solid #cecece!important;
+    border-bottom: 1px solid #cecece!important;
+    font-size: 48px;
+    text-align: center;
+  
+}
+
+.grid-menu-item:first-child {
+    border-left: none !important;
+}
+
+.grid-menu-item ons-icon {
+    margin-top: 40px;
+    font-size: 36px;
+}
+
+.grid-menu-item-label {
+    font-size: 14px;
+}
+
+.grid-menu-item.topcoat-list__item { border:none; }
+
+/* Onsen Ranges */
+.margin-top-adjust {
+    margin-top: -1px;
+}
+
+.list-item-left {
+    display: inline-block;
+    width: 10%;
+    text-align: center;
+}
+
+.list-item-center {
+    display: inline-block;
+    width: 75%;
+    text-align: center;
+}
+
+.range-center {
+    width: 100%;
+    vertical-align: -10px;
+}
+
+.list-item-right {
+    display: inline-block;
+    width: 10%;
+    text-align: center;
+}
+
+.lower {
+    opacity: 0.4;
+}
+
+/* Google Maps for AngularJS */
+.angular-google-map img { max-width: inherit!important; }
+
+.angular-google-map { width: 100%; height: 100%; }
+/* Specify an height via CSS for the map container: */
+.angular-google-map-container { height: 100%; }
+
+/* inAppBrowser plugin - https://github.com/apache/cordova-plugin-inappbrowser/blob/master/doc/index.md */
+.inAppBrowserWrap {
+  background-color: rgba(0,0,0,0.75);
+  color: rgba(235,235,235,1.0);
+}
+.inAppBrowserWrap menu {
+  overflow: auto;
+  list-style-type: none;
+  padding-left: 0;
+}
+.inAppBrowserWrap menu li {
+  font-size: 25px;
+  height: 25px;
+  float: left;
+  margin: 0 10px;
+  padding: 3px 10px;
+  text-decoration: none;
+  color: #ccc;
+  display: block;
+  background: rgba(30,30,30,0.50);
+}
+.inAppBrowserWrap menu li.disabled {
+    color: #777;
+}
+
+/* Settings: Reset*/
+.list-item-action { position: absolute; right: 10px; top: 0px; font-size: 20px; opacity: 0.3; }
+
+.list-item-action > ons-icon { margin-top: 14px; }
+
+/*********** Feed API ***********/
+
+.feed-content { padding:5px 0; }
+
+.feed-date { font-size:12px; }
+
+.feed-categories { font-size:12px; margin:20px 0; }
+
+.feed-categories ons-icon { font-size:12px; }
+
+.status-message { padding:10px 0; }
+
+/* List Items */
+.item { padding: 10px; line-height: 1; }
+
+.item-thum { font-size:30px; width: 50px; height: 50px; }
+
+.item-title { font-size: 15px; font-weight: 500; }
+
+.item-desc { font-size: 14px; color: #666; line-height: 1.3; margin: 4px 0 0 0; padding: 0 30px 0 0; }
+
+/* Profile */
+.profile-card { width: 100%; text-align: center; color: white; padding: 30px 0; line-height: 1.4; background-color: #333; text-shadow: rgba(0, 0, 0, 0.4) 0px 1px 0px; }
+
+.profile-logo { font-size: 30px; border: 1px solid #ffffff; border-radius: 100%; -webkit-border-radius:100%; padding: 15px 18px; }
+
+.profile-name { margin: 20px 0 0 0; font-weight: 600; font-size: 17px; }
+
+.profile-id { margin: 0 0 5px 0; font-size: 14px; opacity: 0.6; }
+
+.profile-desc { font-size: 15px; opacity: 0.6; width: 90%; text-align: center; margin: 0 auto; }
+
+/* Thumbnail */
+.thumbnail-container, .thumbnail { width: 80px; height: 80px; border-radius: 4px; -webkit-border-radius: 4px; background:#cccccc; }
+
+.thumbnail-container { margin-right:15px;}
+
+/* Media */
+video, audio { width:100%; max-width:100%; box-sizing: border-box; display: inline-block; }
+
+audio { margin-top:10px; }
+
+/* Extra style rule for the Home Grid home.html */
+.home-grid { padding:0 0 20px 0; }
+
+/* Fix for Onsen 1.2.2 */
+.navigation-bar__title { text-overflow: ellipsis; overflow: hidden; height: auto; }
+
+.navigation-bar--android__center { max-width: 50%; overflow: hidden; text-overflow: ellipsis; }
+
+.row-center { text-align:center; }

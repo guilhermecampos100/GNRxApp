@@ -1,0 +1,126 @@
+﻿<ons-page ng-controller="CriarnovaController">
+    
+    <ons-toolbar>
+    <div class="left"><ons-back-button>Voltar</ons-back-button></div>
+    <div class="center">Nova Inspeção</div>
+	<div class="right">
+		<ons-toolbar-button ng-click="refresca()">
+			<ons-icon icon="fa-refresh"></ons-toolbar-button>
+	</div>
+	</ons-toolbar>
+<style>
+
+.lista_amarela {
+  background-color: gold;
+  width=100%;
+  height=100%;
+  
+}
+
+.lista_azul {
+  background-color: lightblue;
+  width=100%;
+  height=100%;
+  
+}
+
+.lista_cinza {
+  background-color: #dddddd;
+  width=100%;
+  height=100%;
+  
+}
+
+.lista_normal {
+	line-height: 23px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+
+
+#tituloitem
+{
+    background-color: white;
+    line-height: normal; 
+    padding-bottom: 10px   !important;
+    padding-top: 10px;
+}
+.obs
+{
+    width: 95%;
+    margin-top: 10px;
+    height: 80px;
+	font-size: 16px;
+}	
+
+
+</style>
+
+
+<ons-list> 
+
+
+
+	<ons-list-item class="lista_cinza" ng-show="!temchecklistservidor" >
+		<ons-row>
+			Conectando ao servidor para efetuar download dos modelos...
+		</ons-row>
+	</ons-list-item>
+
+	
+	<ons-list-item  >
+		<ons-row>
+		<font style="font-size:12">Para criar uma nova inspeção você deve escolher um modelo, preencher os dados abaixo e clicar em Criar Checklist.<br>
+		Será criado um banco de dados local no seu app que permitirá responder a inspeção sem usar conexão com a Internet<br><br></font>
+		</ons-row>
+	
+		<ons-row>
+			<ons-col width=100%>
+			   Escolha um modelo<br>
+			  <form name="myForm">
+				<select name="selectModelo" id="selectModelo" ng-model="selectModelo">
+				  <option ng-repeat="item in modelos" value="{{item.codigo}}">{{item.codigo}} - {{item.descricao}}</option>
+				</select>
+				</form>
+			</ons-col>						
+		</ons-row>
+
+	</ons-list-item>
+	
+
+
+	<ons-list-item >
+			<ons-row>
+			<ons-col width="100%">
+				<font style="font-size:13px">Nome/Descrição da Inspeção
+				<textarea class="obs" name="nome" ng-model="nome" cols=40 rows=3></textarea><br>
+				Local<br>
+				<input type=text name="local" ng-model="local" size=50><br>
+				Empresa<br>
+				<input type=text name="empresa" ng-model="empresa" size=50>	<br>
+				No de funcionários <br>
+				<input type=text name="num_funcionarios" ng-model="num_funcionarios" size=10>	<br><br></font>
+				<font style="font-size:10px">Data Criação: {{datacriacao}} Usuário: {{ nomeusuario}}</font>
+			</ons-col>
+		</ons-row>
+	</ons-list-item>
+	
+	<ons-list-item >
+			<ons-row>
+			<ons-col width="100%">&nbsp;<br>
+			    <button class="button button--large" ng-click="criarchecklist()">Criar Checklist</button>
+				<br><br>
+				<span ng-show="atualizando"><h1><i class="fa fa-circle-o-notch fa-spin"></i> {{conta_atualizando}}/{{total_itens}}</h1></span>
+			</ons-col>
+		</ons-row>
+	</ons-list-item>
+
+
+	
+</ons-list>	
+
+
+	
+</ons-page>
+

@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget xmlns     = "http://www.w3.org/ns/widgets"
+        xmlns:gap = "http://phonegap.com/ns/1.0"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+		id="nrx.app.id" 
+		version="1.0.3">
+
+	<gap:config-file platform="android" parent="/manifest">
+     <application android:debuggable="true" />
+	</gap:config-file>
+	
+	
+    <name>GNRX 2.803 </name>
+	<icon src="icon.png" />
+	<gap:splash src="splash.png" />
+	
+    <description>
+    NRX
+    </description>
+
+	<author href="http://chamagar.com" email="guilhermecampos100@gmail.com">
+        Guilherme de Oliveira Campos
+    </author>
+
+    <preference name="phonegap-version" value="3.7.0" /> 
+
+    <access origin="*" />
+	
+	
+	<gap:plugin name="org.apache.cordova.file-transfer" version="0.4.6" />
+    <gap:plugin name="org.apache.cordova.file" />
+    <gap:plugin name="org.apache.cordova.core.camera" />
+	<gap:plugin name="com.brodysoft.sqliteplugin" version="1.0.6" />
+	<gap:plugin name="org.apache.cordova.geolocation" version="0.3.10" />
+	<gap:plugin name="com.sharinglabs.cordova.plugin.cache" version="1.0.0" />
+	<gap:plugin name="com.aserputko.speech.speechrecognition" version="0.1.0" />
+	<preference name="ChaveSpeech" value="1d05de58aef3c70e1a0072c5afc456ae" />
+	<gap:plugin name="org.li8.inappbrowser" version="0.1" />
+	
+	
+	
+	
+
+</widget>

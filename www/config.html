@@ -1,0 +1,158 @@
+<ons-page ng-controller="ConfigController">
+    
+    <ons-toolbar>
+		<div class="left"><ons-toolbar-button ng-click="voltar()"><ons-icon icon="fa-chevron-left"><font style="font-size:14px"> Voltar </font></ons-toolbar-button></div></div>
+		<div class="center">Configurações</div>
+		<div class="right">
+		<ons-toolbar-button ng-click="VoltaTopo()">
+		<ons-icon icon="fa-home"></ons-toolbar-button></div>
+	</ons-toolbar>
+
+	<br>
+	<ons-list-header> Inspeção </ons-list-header><br>
+	
+	<ons-list-item  modifier="tappable" >
+		<ons-row>
+			<ons-col width=100%>
+			<b> {{nomechecklist}} </b><br><br>
+		</ons-col>
+	 </ons-row>
+	</ons-list-item>
+	
+	<ons-list-item modifier="tappable">
+	  <label class="checkbox checkbox--list-item">
+		<input type="checkbox" ng-model="exibircodigonorma" ng-change="exibircodigonormachange()" >
+		<div class="checkbox__checkmark checkbox--list-item__checkmark"></div>
+		Exibir código norma
+	  </label>
+	  
+	</ons-list-item>
+	<ons-list-item modifier="tappable">
+	  <label class="checkbox checkbox--list-item">
+		<input type="checkbox" ng-model="exibirnumerador" ng-change="exibirnumeradorchange()">
+		<div class="checkbox__checkmark checkbox--list-item__checkmark"></div>
+		Exibir numerador
+	  </label>
+	</ons-list-item>
+	
+
+	<ons-list-item  ng-click="atualizaservidor()" modifier="chevron" class="lista_cinza">	
+		<ons-row>
+			<ons-col width=12%>
+				<span>&nbsp; <ons-icon icon="fa-upload"> &nbsp; </span>
+				</ons-col>
+				<ons-col width=88%>
+					Exportar dados para  Servidor <br>
+					Itens: {{conta_atualizando_servidor}}/{{total_para_servidor}} Fotos: {{conta_atualizando_fotos_servidor}}/{{total_fotos_para_servidor}} 
+			</ons-col>						
+		</ons-row>
+	</ons-list-item>
+	
+<br><br>
+	
+	
+	<ons-list-header> Seção </ons-list-header><br>
+		<ons-list-item modifier="tappable" >
+		<ons-row>
+			<ons-col>
+			 <b> {{secaoPai.codigo}}  <span compile="secaoPai.descricao"></span> </b><br><br>
+			 
+			 <table style="font-size:11px"><tr><td>Total de itens na seção: </td><td>{{ totalitens}}  </td></tr>
+			 <tr><td>Respondidos: </td><td>{{ totalrespondidos}}  </td></tr>
+			 <tr><td>&nbsp; Conforme: </td><td>{{ totalconforme}}  </td></tr>
+			 <tr><td>&nbsp; Não Conforme: </td><td>{{ totalnaoconforme}} </td></tr>
+			 </table>
+
+			</ons-col>						
+		</ons-row>
+	</ons-list-item>
+
+	<ons-list-item  ng-click="clonasecao()" modifier="chevron" class="lista_cinza">
+		<ons-row>
+			<ons-col width=12%>
+				<span>&nbsp; <ons-icon icon="ion-ios-browsers-outline"> &nbsp; </span>
+			</ons-col>
+			<ons-col width=88%>
+					Duplicar Seção
+			</ons-col>						
+		</ons-row>
+	</ons-list-item>
+
+<!-- 	
+	<ons-list-item class="lista_cinza">
+		<ons-row>
+			<ons-col width=12%>
+				<span>&nbsp; <ons-icon icon="fa-search"> &nbsp; </span>
+			</ons-col>
+			<ons-col width=88%>
+					<input name=busca ng-model=busca><button ng-click="buscar()">ok</button>
+			</ons-col>						
+		</ons-row>
+	</ons-list-item> -->
+	
+<!-- 	<ons-list-item  ng-show="fotosecao == undefined ||  fotosecao == '' "   ng-click="tirafotosecao()" modifier="chevron" class="lista_cinza">
+		<ons-row>
+			<ons-col width=12%>
+				<span>&nbsp; <ons-icon icon="fa-camera"> &nbsp; </span>
+
+			</ons-col>
+			<ons-col width=88%>
+				Atribuir Foto a Seção
+			</ons-col>						
+		</ons-row>
+	</ons-list-item>
+	
+	<ons-list-item  ng-show="fotosecao != undefined && fotosecao != ''" ng-click="apagafotosecao()" modifier="chevron" class="lista_cinza">
+		<ons-row>
+			<ons-col width=12%>
+				<span> <img ng-src={{fotosecao}} style="width:80%"> </span>
+			</ons-col>
+			<ons-col width=88%>
+					Apaga Foto da Seção 
+			</ons-col>						
+		</ons-row>
+	</ons-list-item> -->
+	
+	
+
+	
+<!-- 	<ons-list-item  ng-click="entraescolha();" modifier="chevron" class="lista_cinza">
+		<ons-row>
+			<ons-col width=12%>
+				<span>&nbsp; <ons-icon icon="fa-refresh"> &nbsp; </span>
+			</ons-col>
+			<ons-col width=88%>			
+					Trocar Checklist
+			</ons-col>						
+		</ons-row> 
+	</ons-list-item>-->	
+	
+	<ons-list-item  ng-click="apagachecklist();" modifier="chevron" class="lista_vermelha" >
+		<ons-row>
+			<ons-col width=12%>
+				<span>&nbsp; <ons-icon icon="fa-trash-o"> &nbsp; </span>
+			</ons-col>
+			<ons-col width=88%>
+					Apagar Seção
+			</ons-col>						
+		</ons-row>
+	</ons-list-item>	
+<style>
+
+.lista_cinza {
+  background-color: #c0c0c0;
+  width=100%;
+  height=100%;
+}
+
+.lista_vermelha {
+  background-color: red;
+  width=100%;
+  height=100%;
+}
+</style>
+	
+</ons-page>
+
+
+
