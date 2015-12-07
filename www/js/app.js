@@ -1949,7 +1949,8 @@ var app = {
 				quality: 50,
 				destinationType: Camera.DestinationType.FILE_URI,
 				encodingType: Camera.EncodingType.JPEG,
-				targetWidth: 1024,
+				targetWidth: 800,
+				targetHeight: 600,
 				correctOrientation: true
 
 			});
