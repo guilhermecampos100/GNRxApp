@@ -1,0 +1,64 @@
+<ons-page ng-controller="PersonalizaChecklistController">
+
+    <ons-toolbar>
+	<div class="center">
+    <ons-toolbar-button ng-click="cancelarPersonalizacao()">Cancelar</ons-toolbar-button> 
+    <ons-toolbar-button ng-click="salvarPersonalizacao()">Salvar</ons-toolbar-button> 
+	</div>
+	</ons-toolbar>
+
+<style>
+.lista_amarela {
+  background-color: gold;
+  width=100%;
+  height=100%;
+}
+
+.lista_verde {
+ /*  background-color: lightgreen; */
+  background-color: #FFF700; 
+  width=100%;
+  height=100%;
+}
+
+.linkglo {
+color: blue;
+text-decoration: underline;
+}
+</style>
+	<ons-list >
+		<ons-list-item class="lista_cinza">
+		<ons-row>
+			<font style="font-size:14px;">Escolha as seções que farão parte do checklist clicando no ícone "+", quando terminar clique em "salvar" acima.</font>
+		</ons-row>
+	</ons-list-item>
+	
+	<ons-list-item ng-show="nenhumItemEncontrado"> Nenhum item encontrado.
+	</ons-list-item>
+	<ons-list-item  name={{secao.codigo}} modifier="chevron" class="{{classelista($index)}}"  ng-repeat="secao in secoes track by $index" >
+		<ons-row>
+			<ons-col width=15%>
+			    <section><center>
+				<!-- SECAO -->
+				<span ng-show="secao.tipo == 'secao'" ng-click="incluiSecao($index)" >
+					<span ng-show="secao.desabilitadaaux"><ons-icon icon="plus-circle" ></ons_icon></span>
+					<span ng-show="!secao.desabilitadaaux"><ons-icon icon="minus-circle" ></ons_icon></span>
+				</span>
+				
+                </center></section>
+			</ons-col>
+			<ons-col width=75% ng-click="showDetail($index)" >
+			    <section><font style="font-size:14px">
+				<span ng-show="secao.tipo == 'secao'"><b><span ng-show="exibirnumerador == true">{{$index + 1}}  - </span> <span ng-show="exibircodigonorma == true">{{secao.codigo}}  - </span> <span compile="secao.descricaocomglossario"></span> (<span style="color:{{corRespondidos(secao.respondidos, secao.totalitens)}}">{{secao.respondidos}}/{{secao.totalitens}}</span>)</b> &nbsp; <a id="imagemanexa" href="#" ng-show="secao.imagemanexa" ng-click="abrepagina(secao.imagemanexa);"> veja imagem </a></span>
+				</font>
+                </section>
+			</ons-col>		
+			<ons-col width=9%>
+			    <section>
+                </section>
+			</ons-col>						
+		</ons-row>
+	</ons-list-item>
+
+</ons-page>
+

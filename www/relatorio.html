@@ -28,10 +28,10 @@
 	
 	<ons-list-item class="lista_cinza">
 		<ons-row>
-			<ons-col width=12%>
-				<span>&nbsp; <ons-icon icon="fa-envelope"> &nbsp; </span>
+			<ons-col width=15%>
+				<span>&nbsp; <ons-icon icon="fa-envelope"></span>
 			</ons-col>
-			<ons-col width=88%>
+			<ons-col width=85%>
 					<input name=busca ng-model=email size="60">
 			</ons-col>						
 		</ons-row>
@@ -76,9 +76,8 @@
 	<ons-list-item >
 		<ons-row>
 		<ons-col width="100%">&nbsp;<br>
-			<button class="button button--large" ng-click="relatorio()">Gerar Relatório</button>
-			<br><br>
-			<span ng-show="atualizando"><h1><i class="fa fa-circle-o-notch fa-spin"></i> {{conta_atualizando}}/{{total_itens}}</h1></span>
+			<button class="button button--large" ng-click="relatorio()" ng-show="!atualizando">Gerar Relatório</button>
+			<span ng-show="atualizando"><i class="fa fa-circle-o-notch fa-spin"></i> Itens: {{conta_atualizando_servidor}}/{{total_para_servidor}} Fotos: {{conta_atualizando_fotos_servidor}}/{{total_fotos_para_servidor}} </span>
 			
 		</ons-col>
 	</ons-row>

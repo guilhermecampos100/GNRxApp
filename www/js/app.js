@@ -91,6 +91,7 @@ var app = {
 					localStorage.setItem('login', login);
 					localStorage.setItem('senha', senha);
 					localStorage.setItem('nomeusuario', data.nome);
+					localStorage.setItem('emailusuario',data.email);
 					entrachecklists();
 					return true;
 				}
@@ -268,7 +269,7 @@ var app = {
 	function criabanco() {
 		//db = window.openDatabase({name: "my.db"});
 		db.transaction(function(tx) {
-			tx.executeSql('CREATE TABLE IF NOT EXISTS checklist_gui (token text, codigo text, descricao text, secaopai text, tipo text, conforme text, obs text, latitude text, longitude text,datalimite text, entidade int, ordenacao text, codigooriginal text, atualizouservidor int, imagemanexa text, hierarquia text, local text, infracao int)');
+			tx.executeSql('CREATE TABLE IF NOT EXISTS checklist_gui (token text, codigo text, descricao text, secaopai text, tipo text, conforme text, obs text, latitude text, longitude text,datalimite text, entidade int, ordenacao text, codigooriginal text, atualizouservidor int, imagemanexa text, hierarquia text, local text, infracao int, desabilitada int)');
 
 			$scope.total_itens = checklist_secoes.length;
 			var cont = 0;
@@ -453,7 +454,98 @@ var app = {
 		}
 	});
 	
+	// PERSONALIZA CHECKLIST Controller ****************************************
+	// **********************************************************
+	app.controller('PersonalizaChecklistController', ['$q', '$interval', '$timeout', '$location', '$anchorScroll', '$scope', '$compile', '$rootScope', '$http', 'SecoesData', function($q, $interval, $timeout, $location, $anchorScroll, $scope, $compile, $rootScope, $http, SecoesData) {
+		$scope.token = $rootScope.tokenGlobal
+
+		var db = window.openDatabase("MeuBanco", "1.0", "Cordova Demo", 200000);
+				
+		$scope.secoes = [];
+			
+		atualizaoffline();	
+		// CARREGA SECOES - ATUALIZA OFFLINE
+		function atualizaoffline () {			
+			$scope.secoes = [];
+			db.transaction(function(tx) {
+				var sql = ''
+				sql = "select * from checklist_gui where token=? and ifnull(secaopai,'') = '' and codigo != '00' "
+				// pega somente o primeiro nivel (secaopai vazio)
+				tx.executeSql(sql, [$scope.token], function(tx, results) {
+					row = results.rows.item(0)
+					$scope.codigoNorma = row.codigo
+					sql = "Select *, (select descricao from checklist_gui where codigo = cg.secaopai) as descricaoPai, (select count(*) from checklist_fotos where codigo = cg.codigo and token = cg.token and ifnull(entidade,0) = ifnull(cg.entidade,0)) as qtd_fotos, (select nome from checklist_fotos where codigo = cg.codigo and token = cg.token and ifnull(entidade,0) = ifnull(cg.entidade,0) limit 1) as fotosecao, (select count(*) from checklist_gui where token=cg.token and tipo='item' and hierarquia like cg.hierarquia || '*%' ) as totalitens, (select sum(case when conforme is not null then 1 else 0 end) totalrespondidos from checklist_gui where token = cg.token and tipo='item' and hierarquia like cg.hierarquia || '*%') as respondidos from checklist_gui cg where cg.token=? and cg.secaopai=? order by ordenacao, entidade"
+					tx.executeSql(sql, [$scope.token, $scope.codigoNorma], function(tx, results) {
+							for (var i=0; i < results.rows.length; i++){
+								row = results.rows.item(i);
+								row.descricaocomglossario = row.descricao.replace("<(glo", "<a id=linkglossario class=linkglo ng-click=showglossario($event,");
+								row.desabilitadaaux = 1;
+								$scope.secoes.push(row);
+							}
+							if (results.rows.length == 0) {
+								$scope.nenhumItemEncontrado = true
+							}
+							$scope.$apply();
+						}, function(a, b) {
+							 alert(b.message);
+						}		
+					);
+				});
+			});
+		}
 	
+		// CLASSE LISTA		
+		$scope.classelista = function(index) {
+			if ($scope.secoes[index].desabilitadaaux == 0)
+				return 'item lista_amarela ng-scope list__item ons-list-item-inner list__item--chevron';
+			else
+				return 'item ng-scope list__item ons-list-item-inner list__item--chevron';
+		}
+
+		// INCLUI / EXCLUI SECAO
+		$scope.incluiSecao = function(index) {
+			var novasecoes = angular.copy($scope.secoes);
+			if (novasecoes[index].desabilitadaaux == undefined || novasecoes[index].desabilitadaaux == 0) {
+					novasecoes[index].desabilitadaaux = 1
+			}
+			else {
+				novasecoes[index].desabilitadaaux = 0
+			}
+			$scope.secoes = [];
+			$scope.secoes = novasecoes;
+			$scope.$apply();
+		};
+		
+		// CANCELA
+		$scope.cancelarPersonalizacao = function() {
+			MeuNavigator.popPage();
+		}
+		
+		// SALVAR
+		$scope.salvarPersonalizacao = function() {
+			$scope.secoes.forEach(function logArrayElements(este, index, array) {
+				db.transaction(function(tx) {
+					tx.executeSql("update checklist_gui set desabilitada=? where token=? and codigo=?", [este.desabilitadaaux, $rootScope.tokenGlobal, este.codigo])
+					var sql = "update checklist_gui set desabilitada = ? where token = ? and hierarquia like (select hierarquia from checklist_gui cg where token=? and codigo = ? limit 1) || '*%'"
+					// desabilita os filhos da secao desabilitada
+					tx.executeSql(sql, [este.desabilitadaaux, $rootScope.tokenGlobal, $rootScope.tokenGlobal, este.codigo])
+				});
+				$scope.VoltaTopo();
+			});
+		}
+		
+		// VOLTA AO TOPO
+		$scope.VoltaTopo = function(index) {
+			$rootScope.secaoPai = '';
+			var pages = MeuNavigator.getPages();
+			var quantas_paginas = pages.length
+			for (var i=1; i < quantas_paginas; i++) {
+				$scope.MeuNavigator.popPage({animation: 'none'})
+			}
+		}
+		
+	}]);
+		
     // SECOES Controller ****************************************
 	// **********************************************************
     app.controller('SecoesController', ['$q', '$interval', '$timeout', '$location', '$anchorScroll', '$scope', '$compile', '$rootScope', '$http', 'SecoesData', function($q, $interval, $timeout, $location, $anchorScroll, $scope, $compile, $rootScope, $http, SecoesData) {
@@ -527,7 +619,8 @@ var app = {
 		});
 
 		var db = window.openDatabase("MeuBanco", "1.0", "Cordova Demo", 200000);
-				var PERSISTENT
+		
+		var PERSISTENT
 		if (typeof LocalFileSystem === 'undefined') {
 			PERSISTENT = window.PERSISTENT;
 		} else {
@@ -631,6 +724,7 @@ var app = {
 						return "<button class='btn btn-xs' style='background-color:lightblue; color:black; font-size:10px;'> &nbsp; <i class='fa fa-minus'> </i>  &nbsp;  </button>"					
 		}
 
+		// REFRESCA
 		$scope.refresca = function() {
 			atualizaoffline();
 		}
@@ -639,7 +733,6 @@ var app = {
 		function atualizaoffline () {			
 			$scope.secoes = [];
 			db.transaction(function(tx) {
-				tx.executeSql('CREATE TABLE IF NOT EXISTS checklist_gui (token text, codigo text, descricao text, secaopai text, tipo text, conforme text, obs text, latitude text, longitude text,datalimite text, entidade int, ordenacao text, codigooriginal text, atualizouservidor int, imagemanexa text, hierarquia text, infracao int)');
 				tx.executeSql('CREATE TABLE IF NOT EXISTS checklist_fotos (token text, codigo text, nome text, obs text, entidade int, atualizouservidor int)');
 				var sql = ''
 
@@ -661,7 +754,7 @@ var app = {
 						sql = "Select *, (select count(*) from checklist_fotos where codigo = cg.codigo and token = cg.token and ifnull(entidade,0) = ifnull(cg.entidade,0)) as qtd_fotos, (select nome from checklist_fotos where codigo = cg.codigo and token = cg.token and ifnull(entidade,0) = ifnull(cg.entidade,0) limit 1) as fotosecao, (select count(*) from checklist_gui where token=cg.token and tipo='item' and hierarquia like cg.hierarquia || '*%' ) as totalitens, (select sum(case when conforme is not null then 1 else 0 end) totalrespondidos from checklist_gui where token = cg.token and tipo='item' and hierarquia like cg.hierarquia || '*%') as respondidos from checklist_gui cg where cg.token=? and cg.secaopai=? order by ordenacao desc, entidade"
 					}
 					else {
-						sql = "Select *, (select descricao from checklist_gui where codigo = cg.secaopai) as descricaoPai, (select count(*) from checklist_fotos where codigo = cg.codigo and token = cg.token and ifnull(entidade,0) = ifnull(cg.entidade,0)) as qtd_fotos, (select nome from checklist_fotos where codigo = cg.codigo and token = cg.token and ifnull(entidade,0) = ifnull(cg.entidade,0) limit 1) as fotosecao, (select count(*) from checklist_gui where token=cg.token and tipo='item' and hierarquia like cg.hierarquia || '*%' ) as totalitens, (select sum(case when conforme is not null then 1 else 0 end) totalrespondidos from checklist_gui where token = cg.token and tipo='item' and hierarquia like cg.hierarquia || '*%') as respondidos from checklist_gui cg where cg.token=? and cg.secaopai=? order by ordenacao, entidade"
+						sql = "Select *, (select descricao from checklist_gui where codigo = cg.secaopai) as descricaoPai, (select count(*) from checklist_fotos where codigo = cg.codigo and token = cg.token and ifnull(entidade,0) = ifnull(cg.entidade,0)) as qtd_fotos, (select nome from checklist_fotos where codigo = cg.codigo and token = cg.token and ifnull(entidade,0) = ifnull(cg.entidade,0) limit 1) as fotosecao, (select count(*) from checklist_gui where token=cg.token and tipo='item' and hierarquia like cg.hierarquia || '*%' and ifnull(desabilitada,0) = 0) as totalitens, (select sum(case when conforme is not null then 1 else 0 end) totalrespondidos from checklist_gui where token = cg.token and tipo='item' and hierarquia like cg.hierarquia || '*%') as respondidos from checklist_gui cg where cg.token=? and cg.secaopai=? and ifnull(desabilitada,0) = 0 order by ordenacao, entidade"
 					}
 				}
 				tx.executeSql(sql, [$scope.token, $scope.secaoPai.codigo], function(tx, results) {
@@ -680,7 +773,8 @@ var app = {
 				);
 			});
 		}
-		// SHOW GLOSSARIO
+	
+    	// SHOW GLOSSARIO
 		$scope.showglossario = function(e, codglo) {
 			db.transaction(function(tx) {
 				tx.executeSql("Select * from glossario where codigo=?", [codglo], function(tx, results) {
@@ -690,8 +784,11 @@ var app = {
 			})
 			$scope.popover.show(e.target);
 		};	
+		
 		// SHOW DETAIL - NAVEGA PARA SECAO OU ITEM
 		$scope.showDetail = function(index) {
+			 $scope.busca = '';
+			 $rootScope.busca = '';
 			 if( (!angular.element(event.target).hasClass('linkglo')) && (event.target.id != 'imagemanexa') ){
 				/* not the <a> entao redireciona, se nao nao faz isso para poder respeitar o link do glossário */
 
@@ -702,7 +799,7 @@ var app = {
 				
 				
 				if (secaoPai.tipo == 'secao')
-					$scope.MeuNavigator.pushPage('secoes.html', {secaoPai: secaoPai, secaoAvo: secaoAvo, animation: 'slide'});
+					$scope.MeuNavigator.pushPage('secoes.html', {secaoPai: secaoPai, secaoAvo: secaoAvo, busca: '', animation: 'slide'});
 					//tabbar.loadPage('secoes.html')
 				else {
 					$rootScope.tevealteracaoitem = false;
@@ -857,7 +954,7 @@ var app = {
 			//db = window.openDatabase({name: "my.db"});
 
 			db.transaction(function(tx) {
-				tx.executeSql('CREATE TABLE IF NOT EXISTS checklist_gui (token text, codigo text, descricao text, secaopai text, tipo text, conforme text, obs text, latitude text, longitude text,datalimite text, entidade int, ordenacao text, codigooriginal text, atualizouservidor int, imagemanexa text, hierarquia text, infracao int)');
+				tx.executeSql('CREATE TABLE IF NOT EXISTS checklist_gui (token text, codigo text, descricao text, secaopai text, tipo text, conforme text, obs text, latitude text, longitude text,datalimite text, entidade int, ordenacao text, codigooriginal text, atualizouservidor int, imagemanexa text, hierarquia text, infracao int, desabilitada int)');
 				tx.executeSql("DELETE from checklist_gui where token = ?", [$rootScope.tokenGlobal], function(tx, resultado) {
 					$scope.total_itens = checklist_secoes.length;
 					var cont = 0;
@@ -930,6 +1027,7 @@ var app = {
 		$scope.exibirnumerador = $rootScope.exibirnumerador
 		
 		$scope.nomechecklist = $rootScope.nomechecklist;
+		
 		/* var page = MeuNavigator.getCurrentPage();
 		$scope.secaoPai = page.options.secaoPai;
 		$scope.secaoAvo = page.options.secaoAvo;
@@ -957,7 +1055,7 @@ var app = {
 		$scope.secaoAvo = $rootScope.secaoAvo
 		var codigo = $scope.secaoPai.codigo;
 		
-		$scope.email = "guilhermecampos100@gmail.com"
+		$scope.email = localStorage.getItem('emailusuario');
 		
 		$scope.exibirnumeradorchange = function() {
 			$rootScope.exibirnumerador = $scope.exibirnumerador
@@ -968,6 +1066,9 @@ var app = {
 		
 		// RELATORIO	
 		$scope.relatorio = function(index) {	
+			$scope.atualizando = true;
+			$scope.$apply;
+			localStorage.setItem('emailusuario',$scope.email);
 			// ATUALIZA SERVIDOR
 			$scope.atualizaservidor();	
 			// CHAMA ENVIO DE EMAIL NO SERVIDOR $HTTP	
@@ -987,10 +1088,10 @@ var app = {
 				   }
 			}).
 			success(function(data, status, headers, config) {
-				alert('e-mail enviado para  ' +  $scope.email);
+				//alert('e-mail enviado para  ' +  $scope.email);
 			}).
 			error(function(data, status, headers, config) {
-				alert('erro no json ' +  status.message);
+				alert('erro de rede ' +  status.message);
 			});	 
 
 		}
@@ -998,7 +1099,6 @@ var app = {
 		// VOLTAR
 		$scope.voltar = function() {
 				//$rootScope.secaoPai = $rootScope.secaoAvo
-				
 				tabbar.loadPage('escolhechecklist.html')
 		};		
 
@@ -1030,7 +1130,12 @@ var app = {
 					
 			);
 		});
-					
+				
+		// BUSCAR	
+		$scope.personalizaChecklist = function(index) {
+			$scope.MeuNavigator.pushPage('personalizaChecklist.html',{secaoPai: $rootScope.secaoPai, animation: 'slide'});
+		}
+				
 		// BUSCAR	
 		$scope.buscar = function(index) {
 			$rootScope.busca = $scope.busca
@@ -1222,7 +1327,6 @@ var app = {
 		//contaregistrosbanco();
 		function contaregistrosbanco() {
 			db.transaction(function(tx) {
-				tx.executeSql('CREATE TABLE IF NOT EXISTS checklist_gui (token text, codigo text, descricao text, secaopai text, tipo text, conforme text, obs text, latitude text, longitude text,datalimite text, entidade int, ordenacao text, codigooriginal text, atualizouservidor int, imagemanexa text, infracao int)');
 
 					tx.executeSql("select count(1) totalitens,  sum(case when conforme is not null then 1 else 0 end) totalrespondidos,  sum(case conforme when 'sim' then 1 else 0 end) totalconforme,   sum(case conforme when 'nao' then 1 else 0 end) totalnaoconforme ,   sum(case conforme when 'nao se aplica' then 1 else 0 end) totalnaoseaplica, sum(case ifnull(atualizouservidor,0) when 0 then 1 else 0 end) totalparaatualizar, sum(case ifnull(atualizouservidor,0) when 0 then 1 else 0 end) totalparaatualizar, (select sum(case ifnull(atualizouservidor,0) when 0 then 1 else 0 end) from checklist_fotos where codigo = cg.codigo) totalfotosparaatualizar from checklist_gui cg where token=? and codigo like ? and tipo='item' ", [$scope.token, $scope.secaoPai.codigo + '.%'], function(tx, results) {
 						
@@ -1400,8 +1504,6 @@ var app = {
 							funcArray.push(row)
 							//funcArray.push(uploadFoto(uri_arquivo, token, codigo, nome, obs, entidade ));
 							//uploadFoto(uri_arquivo, token, codigo, nome, obs, entidade );
-							
-
 						}
 						// CHAMA O CHAMADOR DE UPLOADS
 						call();
@@ -1488,10 +1590,14 @@ var app = {
 		success(function(data, status, headers, config) {
 			//alert(JSON.stringify(data));
 			$scope.conta_atualizando_servidor ++;
-			//$scope.$apply();
+			if ($scope.conta_atualizando_servidor == $scope.total_para_servidor && $scope.conta_atualizando_fotos_servidor == $scope.total_fotos_para_servidor) {
+				$scope.atualizando = false
+				alert('e-mail enviado para  ' +  $scope.email);
+			}
+			$scope.$apply();
 		}).
 		error(function(data, status, headers, config) {
-			alert('erro no json ' +  data);
+			alert('erro de rede ' +  data);
 		});	
 	}; 
 	
@@ -1537,7 +1643,11 @@ var app = {
 			tx.executeSql("update checklist_fotos set atualizouservidor = 1 where token = '" & retorno.token & "' and codigo = '" + retorno.codigo + "' nome = '" + retorno.nome + "'");
 		});
 		var a=1;
-		$scope.$apply();		
+		if ($scope.conta_atualizando_servidor == $scope.total_para_servidor && $scope.conta_atualizando_fotos_servidor == $scope.total_fotos_para_servidor) {
+			$scope.atualizando = false
+			alert('e-mail enviado para  ' +  $scope.email);
+		}
+		$scope.$apply();	
 	}
 
 	
