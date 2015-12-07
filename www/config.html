@@ -35,25 +35,34 @@
 	  </label>
 	</ons-list-item>
 	
+	<ons-list-item  ng-click="personalizaChecklist()" modifier="chevron" >	
+		<ons-row>
+			<ons-col width=15%>
+				<span>&nbsp; <ons-icon icon="list-ol"> &nbsp; </span>
+				</ons-col>
+				<ons-col width=85%>
+					Personalizar Checklist<br>
+			</ons-col>						
+		</ons-row>
+	</ons-list-item>
 
 	<ons-list-item  ng-click="atualizaservidor()" modifier="chevron" class="lista_cinza">	
 		<ons-row>
-			<ons-col width=12%>
+			<ons-col width=15%>
 				<span>&nbsp; <ons-icon icon="fa-upload"> &nbsp; </span>
 				</ons-col>
-				<ons-col width=88%>
+				<ons-col width=85%>
 					Exportar dados para  Servidor <br>
 					Itens: {{conta_atualizando_servidor}}/{{total_para_servidor}} Fotos: {{conta_atualizando_fotos_servidor}}/{{total_fotos_para_servidor}} 
 			</ons-col>						
 		</ons-row>
 	</ons-list-item>
-	<br>
 	<ons-list-item  ng-click="apagachecklist();" modifier="chevron" class="lista_vermelha" >
 		<ons-row>
-			<ons-col width=12%>
+			<ons-col width=18%>
 				<span>&nbsp; <ons-icon icon="fa-trash-o"> &nbsp; </span>
 			</ons-col>
-			<ons-col width=88%>
+			<ons-col width=82%>
 					Apagar Inspeção completa
 			</ons-col>						
 		</ons-row>
@@ -81,7 +90,7 @@
 	<ons-list-item  ng-click="clonasecao()" modifier="chevron" class="lista_cinza">
 		<ons-row>
 			<ons-col width=12%>
-				<span>&nbsp; <ons-icon icon="ion-ios-browsers-outline"> &nbsp; </span>
+				<span>&nbsp;<ons-icon icon="ion-ios-browsers-outline"></span>
 			</ons-col>
 			<ons-col width=88%>
 					Duplicar Seção
