@@ -1,0 +1,20 @@
+<ons-page ng-controller="SecoesController">
+    <ons-popover>
+    <ons-list>
+     	<ons-list-header> Local </ons-list-header>	
+		<ons-list-item >
+			<ons-row>
+				<ons-col width="100%">
+					<textarea class="obs" name="local" ng-model="$parent.$parent.local" style="width:100%; font-size: large;" rows=2></textarea><br>
+					<!-- <button class="button button--large" ng-click="gravaobservacao()">Registrar</button> -->
+				</ons-col>
+			</ons-row>
+			<ons-row>
+					<button class="button" style="background-color:#cccccc; font-size:14px;" ng-click="cancelalocal()"> <ons-icon icon="fa-times"></ons-icon> </button>&nbsp;
+					<button class="button"  style="background-color:#cccccc; font-size:14px;" ng-click="limpalocal()"> <ons-icon icon="fa-eraser"></ons-icon> </button>&nbsp;<button name="btnregistrar" id="btnregistrar" class="button" ng-click="gravalocal()">Gravar </button>&nbsp;
+					<span ng-show="!ouvindo && !ios"><button class="button" style="font-size:14px;" id="button" ng-click="recognizeSpeechLocal();"> <ons-icon icon="fa-microphone" ></ons-icon></button></span>
+			</ons-row>			
+        </ons-list-item>
+    </ons-list>
+  </ons-popover>
+ </ons-page>

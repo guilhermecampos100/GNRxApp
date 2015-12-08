@@ -564,15 +564,308 @@ var app = {
 			atualizaoffline();
 		}
 		
-	/* 	if (page.options.busca != undefined) {
-			var busca = page.options.busca;
-			$scope.busca = page.options.busca;
-		}  */
+		var db = window.openDatabase("MeuBanco", "1.0", "Cordova Demo", 200000);
+	
+
+		// POPOVERS	
+		ons.createPopover('popover.html',{parentScope: $scope}).then(function(popover) {
+			$scope.popover = popover;
+		});
+
+		ons.createPopover('popover_menu.html',{parentScope: $scope}).then(function(popover_menu) {
+			$scope.popover_menu = popover_menu;
+		});
+
 		
-		/* if ($rootScope.busca != undefined) {
-			var busca = $rootScope.busca;
-			$scope.busca = $rootScope.busca;
-		}	 */
+		ons.createPopover('popover_obs.html',{parentScope: $scope}).then(function(popover_obs) {
+			$scope.popover_obs = popover_obs;
+		});
+		
+		ons.createPopover('popover_local.html',{parentScope: $scope}).then(function(popover_local) {
+			$scope.popover_local = popover_local;
+		});
+	
+		// * AREA DO POPUP OBSERVACAO
+
+		$scope.observacao = '';
+		$scope.codigoobservacao = '';
+		$scope.entidadeobservacao = '';
+		$scope.indice = '';
+		$scope.eventotarget = '';
+		
+		// * LE OBSERVACAO
+		function LeObservacao(index) {
+			db.transaction(function(tx) {
+				tx.executeSql("Select * from checklist_gui where token=? and codigo=? and ifnull(entidade,0)=?", [$scope.token, $scope.secoes[index].codigo, $scope.secoes[index].entidade], function(tx, results) {
+					if (results.rows.length > 0) {
+						$scope.observacao = results.rows.item(0).obs;
+						$scope.codigoobservacao = results.rows.item(0).codigo;
+						$scope.entidadeobservacao = results.rows.item(0).entidade;
+					}
+				});
+			});
+		}
+			
+		// RECONHECIMENTO DE VOZ
+		$scope.recognizeSpeech = function () {
+			var maxMatches = 1;
+			var promptString = "Comece a falar, para terminar clique no botão vermelho ou fique em silêncio."; // optional
+			var language = "pt-BR";                     // optional
+			window.plugins.speechrecognizer.startRecognize(function(result){
+				if ($scope.observacao == '' || $scope.observacao == undefined)
+						$scope.observacao = result;
+				else 
+					$scope.observacao = $scope.observacao + ' ' + result;
+				$scope.$apply();
+			}, function(errorMessage){
+				console.log("Erro no reconhecimento de voz, por favor, tente novamente: " + errorMessage);
+			}, maxMatches, promptString, language);
+		}
+	
+		// CANCELA INSERÇÃO DE OBSERVACAO
+		$scope.cancelaobservacao = function() {
+			$scope.inserindoobs = false;
+			$scope.popover_obs.hide();
+		}
+
+		// LIMPA OBSERVACAO
+		$scope.limpaobservacao = function() {
+			$scope.observacao = "";
+		}
+		
+		// ABRE OBSERVACAO
+		$scope.abreObservacao = function() {
+			$scope.observacao = $scope.secoes[$scope.indice].obs;
+			$scope.codigoobservacao = $scope.secoes[$scope.indice].codigo;
+			$scope.entidadeobservacao = $scope.secoes[$scope.indice].entidade;
+			if ($scope.entidadeobservacao == undefined) { 
+				$scope.entidadeobservacao = 0 
+			}
+			$scope.popover_menu.hide();
+			$scope.popover_obs.show($scope.eventotarget);
+		}
+
+		// GRAVA OBSERVACAO
+		$scope.gravaobservacao = function() {
+			// observacao geral do item
+			db.transaction(function(tx) {
+				tx.executeSql("update checklist_gui set obs=?, atualizouservidor = 0 where token=? and codigo=? and ifnull(entidade,0)=?", [$scope.observacao, $rootScope.tokenGlobal, $scope.codigoobservacao, $scope.entidadeobservacao], function(tx, res) {
+					$rootScope.tevealteracaoitem = true;
+					$scope.txtobservacao = $scope.observacao;
+					$scope.inserindoobs = false;
+					
+					var novasecoes = angular.copy($scope.secoes);
+					novasecoes[$scope.indice].obs = $scope.observacao;
+					$scope.secoes = [];
+					$scope.secoes = novasecoes;
+					$scope.$apply();
+					
+					$scope.popover_obs.hide();
+					setTimeout(function(){ $scope.$apply(); }, 300);
+				});
+			
+			});
+		};
+
+		// * FIM AREA DO POPUP OBSERVACAO
+		
+
+		
+		// *  AREA DO POPUP LOCAL
+		
+		$scope.local = '';
+		$scope.codigolocal = '';
+		$scope.entidadelocal = '';
+
+		// CANCELA INSERÇÃO DE LOCAL
+		$scope.cancelalocal = function() {
+			$scope.inserindolocal = false;
+			$scope.popover_local.hide();
+		}
+
+		// LIMPA LOCAL
+		$scope.limpalocal = function() {
+			$scope.local = "";
+		}
+		
+		// ABRE LOCAL
+		$scope.abreLocal = function() {
+			
+			$scope.local = $scope.secoes[$scope.indice].local;
+			if ($scope.local == undefined || $scope.local == "") {
+				// SE NAO FOI GRAVADO UM LOCAL ESPECIFICO ENTAO PEGA DO ROOTSCOPE
+				$scope.local = $rootScope.local
+			}	
+			
+			$scope.codigoolocal = $scope.secoes[$scope.indice].codigo;
+			$scope.entidadelocal = $scope.secoes[$scope.indice].entidade;
+			if ($scope.entidadelocal == undefined) { 
+				$scope.entidadelocal = 0 
+			}
+			$scope.popover_menu.hide();
+			$scope.popover_local.show($scope.eventotarget);
+		}
+
+		// GRAVA LOCAL
+		$scope.gravalocal = function() {
+			db.transaction(function(tx) {
+				tx.executeSql("update checklist_gui set local=?, atualizouservidor = 0 where token=? and codigo=? and ifnull(entidade,0)=?", [$scope.local, $rootScope.tokenGlobal, $scope.codigolocal, $scope.entidadelocal], function(tx, res) {
+					$rootScope.tevealteracaoitem = true;
+					$scope.inserindolocal = false;
+					
+					var novasecoes = angular.copy($scope.secoes);
+					novasecoes[$scope.indice].local = $scope.local;
+					$scope.secoes = [];
+					$scope.secoes = novasecoes;
+					$scope.$apply();
+					
+					$scope.popover_local.hide();
+					setTimeout(function(){ $scope.$apply(); }, 300);
+				});
+			
+			});
+		};
+
+		// * FIM AREA DO POPUP LOCAL
+		
+		
+		// REGISTRA GPS
+		$scope.registragps = function() {
+			$scope.popover_menu.hide();
+			var leugps = function(position) {
+				$scope.latitude = position.coords.latitude;
+				$scope.longitude = position.coords.longitude;
+				$scope.obtendo_gps = false;
+				$scope.$apply();
+				
+				db.transaction(function(tx) {
+					tx.executeSql("update checklist_gui set latitude=?, longitude=?, atualizouservidor = 0 where token=? and codigo=? and ifnull(entidade,0)=?", [position.coords.latitude, position.coords.longitude, $rootScope.tokenGlobal, $scope.secoes[$scope.indice].codigo, $scope.secoes[$scope.indice].entidade], function(tx, res) {
+						$rootScope.tevealteracaoitem = true;
+						var novasecoes = angular.copy($scope.secoes);
+						novasecoes[$scope.indice].latitude = position.coords.latitude;
+						novasecoes[$scope.indice].longitude = position.coords.longitude;
+						$scope.secoes = [];
+						$scope.secoes = novasecoes;
+						$scope.$apply();
+						
+
+						});
+				
+				});
+				
+			}	
+			$scope.obtendo_gps = true;
+			$scope.$apply();	
+			navigator.geolocation.getCurrentPosition(leugps, deuerro);
+		};
+		
+		var deuerro = function(error) {
+			alert("Erro código: " + error.code);
+			$scope.obtendo_gps = false;
+			$scope.$apply();	
+		};	
+	
+
+		// * FOTOS
+	
+	
+		// TIRA FOTO
+		var imageURI;
+		var URL_foto;
+		$scope.tirafoto =  function(origem) {
+			$scope.popover_menu.hide();
+			var opcoes =   {
+				quality: 50,
+				destinationType: Camera.DestinationType.FILE_URI,
+				encodingType: Camera.EncodingType.JPEG,
+				targetWidth: 800,
+				targetHeight: 600,
+				correctOrientation: true
+
+			}
+			if (origem == 'galeria') {
+				 opcoes.sourceType = navigator.camera.PictureSourceType.PHOTOLIBRARY
+			}
+			navigator.camera.getPicture(tiroufoto, deuerro, opcoes);
+		} 
+		
+		var tiroufoto = function( imgURI ) {
+			imageURI = imgURI;
+			// resolve file system for image
+			window.resolveLocalFileSystemURL(imageURI, gotFileEntry, deuerro);
+		}
+			
+		
+		// MOVE A FOTO PARA O DIRETORIO PERMANENTE		
+		function gotFileEntry(fileEntry) {
+			var d = new Date();
+			var nome_arquivo = d.getTime().toString() + '.jpg';
+			fileEntry.moveTo(fs.root, nome_arquivo , fsSuccess, deuerro);
+		}
+
+		var fsSuccess = function(arquivo) {
+
+			db.transaction(function(tx) {
+				tx.executeSql('CREATE TABLE IF NOT EXISTS checklist_fotos (token text, codigo text, nome text, obs text, entidade int, atualizouservidor int)');
+				tx.executeSql("INSERT INTO checklist_fotos (token, codigo, nome, entidade) VALUES (?,?,?,?)", [$rootScope.tokenGlobal, $scope.secoes[$scope.indice].codigo, arquivo.name, $scope.secoes[$scope.indice].entidade], function(tx, res) {
+					$rootScope.tevealteracaoitem = true;
+					var novasecoes = angular.copy($scope.secoes);
+					novasecoes[$scope.indice].qtd_fotos ++;
+					$scope.secoes = [];
+					$scope.secoes = novasecoes;
+					$scope.$apply();
+
+				});
+			});
+
+			console.log("gravou " + arquivo.name + " - " + arquivo.fullPath);
+		}
+
+		// * FIM FOTOS
+
+		// ENTRA ITEM
+		$scope.entraItem = function() {
+			$scope.popover_menu.hide();
+			 $scope.busca = '';
+			 $rootScope.busca = '';
+			 if( (!angular.element(event.target).hasClass('linkglo')) && (event.target.id != 'imagemanexa') ){
+				/* not the <a> entao redireciona, se nao nao faz isso para poder respeitar o link do glossário */
+				var secaoPai = $scope.secoes[$scope.indice];
+				var secaoAvo = $scope.secaoPai
+				$rootScope.secaoPai = secaoPai
+				$rootScope.secaoAvo = secaoAvo
+				$scope.MeuNavigator.pushPage('itens.html', {secaoPai: secaoPai, secaoAvo: secaoAvo, animation: 'slide'});
+			}
+		};   
+
+	
+		// SHOW DETAIL - NAVEGA PARA SECAO OU ITEM
+		$scope.showDetail = function(index, evt) {
+			 $scope.busca = '';
+			 $rootScope.busca = '';
+			 if( (!angular.element(event.target).hasClass('linkglo')) && (event.target.id != 'imagemanexa') ){
+				/* not the <a> entao redireciona, se nao nao faz isso para poder respeitar o link do glossário */
+
+				var secaoPai = $scope.secoes[index];
+				var secaoAvo = $scope.secaoPai
+				$rootScope.secaoPai = secaoPai
+				$rootScope.secaoAvo = secaoAvo
+				
+				
+				if (secaoPai.tipo == 'secao')
+					$scope.MeuNavigator.pushPage('secoes.html', {secaoPai: secaoPai, secaoAvo: secaoAvo, busca: '', animation: 'slide'});
+				else {
+					$rootScope.tevealteracaoitem = false;
+					$scope.indice = index;
+					$scope.eventotarget = evt.target;
+					$scope.$apply();
+					$scope.popover_menu.show(evt.target);
+				
+					//$scope.MeuNavigator.pushPage('itens.html', {secaoPai: secaoPai, secaoAvo: secaoAvo, animation: 'slide'});
+				}
+			 }
+		};
+				
 			
 		// VERIFICA VALOR CONFORMIDADE
 		$scope.mudaconformidade = function(conforme, codigo, index) {
@@ -613,11 +906,7 @@ var app = {
 		if ($scope.secaoPai.entidade != undefined && $scope.secaoPai.entidade != '') {
 			entidade = $scope.secaoPai.entidade;
 		}
-		
-		ons.createPopover('popover.html',{parentScope: $scope}).then(function(popover) {
-			$scope.popover = popover;
-		});
-
+	
 		var db = window.openDatabase("MeuBanco", "1.0", "Cordova Demo", 200000);
 		
 		var PERSISTENT
@@ -785,30 +1074,7 @@ var app = {
 			$scope.popover.show(e.target);
 		};	
 		
-		// SHOW DETAIL - NAVEGA PARA SECAO OU ITEM
-		$scope.showDetail = function(index) {
-			 $scope.busca = '';
-			 $rootScope.busca = '';
-			 if( (!angular.element(event.target).hasClass('linkglo')) && (event.target.id != 'imagemanexa') ){
-				/* not the <a> entao redireciona, se nao nao faz isso para poder respeitar o link do glossário */
-
-				var secaoPai = $scope.secoes[index];
-				var secaoAvo = $scope.secaoPai
-				$rootScope.secaoPai = secaoPai
-				$rootScope.secaoAvo = secaoAvo
-				
-				
-				if (secaoPai.tipo == 'secao')
-					$scope.MeuNavigator.pushPage('secoes.html', {secaoPai: secaoPai, secaoAvo: secaoAvo, busca: '', animation: 'slide'});
-					//tabbar.loadPage('secoes.html')
-				else {
-					$rootScope.tevealteracaoitem = false;
-					//tabbar.loadPage('itens.html')
-					$scope.MeuNavigator.pushPage('itens.html', {secaoPai: secaoPai, secaoAvo: secaoAvo, animation: 'slide'});
-				}
-			 }
-		};
-		
+	
 		// VOLTAR
 		$scope.voltar = function() {
 			 if( (!angular.element(event.target).hasClass('linkglo')) && (event.target.id != 'imagemanexa') ){

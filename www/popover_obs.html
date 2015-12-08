@@ -1,0 +1,20 @@
+<ons-page ng-controller="SecoesController">
+    <ons-popover>
+    <ons-list>
+     	<ons-list-header> Observação </ons-list-header>	
+		<ons-list-item >
+			<ons-row>
+				<ons-col width="100%">
+					<textarea class="obs" name="observacao" ng-model="$parent.$parent.observacao" style="width:100%; font-size: large;" rows=4></textarea><br>
+					<!-- <button class="button button--large" ng-click="gravaobservacao()">Registrar</button> -->
+				</ons-col>
+			</ons-row>
+			<ons-row>
+					<button class="button" style="background-color:#cccccc; font-size:14px;" ng-click="cancelaobservacao()"> <ons-icon icon="fa-times"></ons-icon> </button>&nbsp;
+					<button class="button"  style="background-color:#cccccc; font-size:14px;" ng-click="limpaobservacao()"> <ons-icon icon="fa-eraser"></ons-icon> </button>&nbsp;<button name="btnregistrar" id="btnregistrar" class="button" ng-click="gravaobservacao()">Gravar </button>&nbsp;
+					<span ng-show="!ouvindo && !ios"><button class="button" style="font-size:14px;" id="button" ng-click="recognizeSpeech();"> <ons-icon icon="fa-microphone" ></ons-icon></button></span>
+			</ons-row>			
+        </ons-list-item>
+    </ons-list>
+  </ons-popover>
+ </ons-page>

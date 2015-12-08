@@ -66,7 +66,7 @@ text-decoration: underline;
 				<span ng-show="secao.obs != undefined && secao.obs != ''" style="font-size:10px; color:#1284ff;"><ons-icon icon="fa-comment" ></ons_icon></span>				
                 </center></section>
 			</ons-col>
-			<ons-col width=75% ng-click="showDetail($index)" >
+			<ons-col width=75% ng-click="showDetail($index, $event)" >
 			    <section><font style="font-size:14px">
 				<span ng-show="secao.tipo == 'secao'"><b><span ng-show="exibirnumerador == true">{{$index + 1}}  - </span> <span ng-show="exibircodigonorma == true">{{secao.codigo}}  - </span> <span compile="secao.descricaocomglossario"></span> (<span style="color:{{corRespondidos(secao.respondidos, secao.totalitens)}}">{{secao.respondidos}}/{{secao.totalitens}}</span>)</b> &nbsp; <a id="imagemanexa" href="#" ng-show="secao.imagemanexa" ng-click="abrepagina(secao.imagemanexa);"> veja imagem </a></span>
 				<span ng-show="secao.tipo == 'item'"><span ng-show="exibirnumerador == true">{{$index + 1}}  - </span> <span ng-show="exibircodigonorma == true">{{secao.codigo}} - </span><span compile="secao.descricaocomglossario"></span> &nbsp; <a id="imagemanexa" href="#" ng-show="secao.imagemanexa" ng-click="abrepagina(secao.imagemanexa);"> veja imagem </a> <font color=red>I({{secao.infracao}})</font></span>
@@ -81,6 +81,4 @@ text-decoration: underline;
 			</ons-col>						
 		</ons-row>
 	</ons-list-item>
-
 </ons-page>
-
