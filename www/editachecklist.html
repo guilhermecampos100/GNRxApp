@@ -1,0 +1,35 @@
+﻿<ons-page ng-controller="EditaChecklistController">
+    <ons-toolbar>
+    <div class="center"><ons-back-button>Cancelar</ons-back-button> &nbsp;
+		<ons-toolbar-button ng-click="salvarEdicao()">Salvar</ons-toolbar-button> 
+	</div>
+	</ons-toolbar>
+
+
+<ons-list> 
+	<ons-list-item  >
+		<ons-row>
+		Modelo: {{modelo}}<br><br></font>
+		</ons-row>
+	</ons-list-item>
+	<ons-list-item >
+			<ons-row>
+			<ons-col width="100%">
+				<font style="font-size:13px"><b>Nome/Descrição da Inspeção</b><br>
+				<textarea class="obs" name="nome" ng-model="nome" cols=40 rows=3></textarea><br>
+				<b>Local</b><br>
+				<input type=text name="local" ng-model="local" size=50><br><br>
+				<b>Empresa</b><br>
+				<input type=text name="empresa" ng-model="empresa" size=50>	<br><br>
+				<b>No de funcionários</b> <br>
+				<input type=text name="num_funcionarios" ng-model="num_funcionarios" size=10>	<br><br></font>
+				<font style="font-size:10px">Data Criação: {{datacriacao}} Usuário: {{ nomeusuario}}</font>
+			</ons-col>
+		</ons-row>
+	</ons-list-item>
+</ons-list>	
+
+
+	
+</ons-page>
+

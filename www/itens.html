@@ -29,6 +29,9 @@
 				<b>{{secaoPai.codigo}} <span compile="descricaoitem"></span></b><br>
 				&nbsp; <a id="imagemanexa" href="#" ng-show="secao.imagemanexa" ng-click="abrepagina(secao.imagemanexa);"> veja imagem </a> 
 				&nbsp;<button class="btn btn-xs" ng-click="duplicar()" ng-show="!voltarDeItemAvulso" > <ons-icon icon="ion-ios-browsers-outline" size="13px" fixed-width="false"></ons-icon> Duplicar </button>
+				&nbsp;<button class="btn btn-xs" style="background-color:lightblue;" ng-click="associarNorma()" ng-show="podeExcluir && !criandoNovoItemAvulso" > <ons-icon icon="fa-trash-o" size="13px" fixed-width="false"></ons-icon> Associar norma </button>
+				&nbsp;<button class="btn btn-xs" style="background-color:red;" ng-click="excluirItem()" ng-show="podeExcluir && !criandoNovoItemAvulso" > <ons-icon icon="fa-trash-o" size="13px" fixed-width="false"></ons-icon> Excluir </button>
+				
 			</ons-col>						
 		</ons-row>
 	</ons-list-item>

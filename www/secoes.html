@@ -13,6 +13,12 @@
 	</ons-toolbar>
 
 <style>
+.lista_azulclaro {
+  background-color: lightblue;
+  width=100%;
+  height=100%;
+}
+
 .lista_amarela {
   background-color: gold;
   width=100%;
@@ -26,12 +32,29 @@
   height=100%;
 }
 
+.lista_verde {
+ /*  background-color: #aaffaa */
+  background-color: #FFF700; 
+  width=100%;
+  height=100%;
+}
+
+
 .linkglo {
 color: blue;
 text-decoration: underline;
 }
 </style>
+
 	<ons-list >
+	
+		<ons-list-item class="lista_azulclaro" ng-show="associarNorma">
+		<font style="font-size:11px;">
+			Definindo o código da NR correto para {{codigoAssociar}} {{observacaoAssociar}}<br>
+			Navegue nas seções e escolha um item da norma para associar, clicando em "associar norma"<br></font>
+			<button ng-click="cancelarAssociar();" class='btn btn-xs' style='background-color:lightgrey; color:black; font-size:10px;'> &nbsp; Cancelar &nbsp;  </button>
+		</ons-list-item>
+	
 		<ons-list-item class="lista_cinza">
 		<ons-row>
 			<ons-col width=15%> <section><center>
@@ -54,8 +77,12 @@ text-decoration: underline;
 					<span ng-show="secao.fotosecao != undefined"><img ng-src="{{caminhofoto + secao.fotosecao}}" style="width:80%"></span>
 					<span ng-show="secao.fotosecao == undefined"><ons-icon icon="fa-folder-o" ></ons_icon></span>
 				</span>
+				<!-- INFO -->
+				<span ng-show="secao.tipo == 'info'">
+					<span ng-show="secao.fotosecao != undefined"><img ng-src="{{caminhofoto + secao.fotosecao}}" style="width:80%"></span>
+				</span>				
 				<!-- ITEM -->
-				<span ng-show="secao.tipo == 'item'" style="color:{{coricone(secao.conforme)}}" ng-click="mudaconformidade(secao.conforme, secao.codigo, $index)">
+				<span ng-show="secao.tipo == 'item' && !associarNorma" style="color:{{coricone(secao.conforme)}}" ng-click="mudaconformidade(secao.conforme, secao.codigo, $index)">
 				<button ng-show="secao.conforme == undefined || secao.conforme == '' " class='btn btn-xs' style='background-color:lightgrey; color:black; font-size:10px;'> &nbsp; <i class='fa fa-question'> </i>  &nbsp;  </button>
 				<button ng-show="secao.conforme == 'sim' " class='btn btn-xs' style='background-color:green; color:white; font-size:10px;'>sim</button>
 				<button ng-show="secao.conforme == 'nao' " class='btn btn-xs' style='background-color:red; color:white; font-size:10px;'>não</button>
@@ -66,14 +93,34 @@ text-decoration: underline;
 				<span ng-show="secao.obs != undefined && secao.obs != ''" style="font-size:10px; color:#1284ff;"><ons-icon icon="fa-comment" ></ons_icon></span>				
                 </center></section>
 			</ons-col>
-			<ons-col width=75% ng-click="showDetail($index, $event)" >
+			<ons-col width=75% ng-click="showDetail($index, $event)" ng-show="!associarNorma"  >
 			    <section><font style="font-size:14px">
+				<!-- INFO -->
+				<span ng-show="secao.tipo == 'info'"><span compile="secao.descricaocomglossario"></span> &nbsp; <a id="imagemanexa" href="#" ng-show="secao.imagemanexa" ng-click="abrepagina(secao.imagemanexa);"> veja imagem </a></span>				
+				<!-- SECAO -->
 				<span ng-show="secao.tipo == 'secao'"><b><span ng-show="exibirnumerador == true">{{$index + 1}}  - </span> <span ng-show="exibircodigonorma == true">{{secao.codigo}}  - </span> <span compile="secao.descricaocomglossario"></span> (<span style="color:{{corRespondidos(secao.respondidos, secao.totalitens)}}">{{secao.respondidos}}/{{secao.totalitens}}</span>)</b> &nbsp; <a id="imagemanexa" href="#" ng-show="secao.imagemanexa" ng-click="abrepagina(secao.imagemanexa);"> veja imagem </a></span>
+				<!-- ITEM -->
 				<span ng-show="secao.tipo == 'item'"><span ng-show="exibirnumerador == true">{{$index + 1}}  - </span> <span ng-show="exibircodigonorma == true">{{secao.codigo}} - </span><span compile="secao.descricaocomglossario"></span> &nbsp; <a id="imagemanexa" href="#" ng-show="secao.imagemanexa" ng-click="abrepagina(secao.imagemanexa);"> veja imagem </a> <font color=red>I({{secao.infracao}})</font></span>
-				
 				</font>
                 </section>
-			</ons-col>		
+			</ons-col>	
+<!-- ASSOCIAR NORMA -->
+
+			<ons-col width=75% ng-show="associarNorma" >
+			    <section><font style="font-size:14px">
+				<!-- INFO -->
+				<span ng-show="secao.tipo == 'info'"><span compile="secao.descricaocomglossario"></span> &nbsp; <a id="imagemanexa" href="#" ng-show="secao.imagemanexa" ng-click="abrepagina(secao.imagemanexa);"> veja imagem </a></span>				
+				<!-- SECAO -->
+				<span ng-show="secao.tipo == 'secao'" ng-click="showDetail($index, $event)" ><b><span ng-show="exibirnumerador == true">{{$index + 1}}  - </span> <span ng-show="exibircodigonorma == true">{{secao.codigo}}  - </span> <span compile="secao.descricaocomglossario"></span> (<span style="color:{{corRespondidos(secao.respondidos, secao.totalitens)}}">{{secao.respondidos}}/{{secao.totalitens}}</span>)</b> &nbsp; <a id="imagemanexa" href="#" ng-show="secao.imagemanexa" ng-click="abrepagina(secao.imagemanexa);"> veja imagem </a></span>
+				<!-- ITEM -->
+				<span ng-show="secao.tipo == 'item'" ng-click="escolheNorma($index)" ><span ng-show="exibircodigonorma == true">{{secao.codigo}} - </span><span compile="secao.descricaocomglossario"></span> &nbsp; <a id="imagemanexa" href="#" ng-show="secao.imagemanexa" ng-click="abrepagina(secao.imagemanexa);"> veja imagem </a> <font color=red>I({{secao.infracao}})</font>
+				&nbsp; <button  class='btn btn-xs' style='background-color:lightblue; color:black; font-size:10px;'> &nbsp; Associar Norma &nbsp;  </button>
+				</span>
+				</font>
+                </section>
+			</ons-col>	
+			
+			
 			<ons-col width=9%>
 			    <section>
 			

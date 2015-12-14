@@ -9,6 +9,23 @@
 	</ons-toolbar>
 
 	<br>
+	
+	<ons-list-item modifier="tappable">
+	  <label class="checkbox checkbox--list-item">
+		<input type="checkbox" ng-model="exibircodigonorma" ng-change="exibircodigonormachange()" >
+		<div class="checkbox__checkmark checkbox--list-item__checkmark"></div>
+		Exibir Código Norma &nbsp;
+	  </label>
+	  
+	  <label class="checkbox checkbox--list-item">
+		<input type="checkbox" ng-model="exibirnumerador" ng-change="exibirnumeradorchange()">
+		<div class="checkbox__checkmark checkbox--list-item__checkmark"></div>
+		Exibir Numerador
+	  </label>
+	</ons-list-item>
+	
+	
+	
 	<ons-list-header> Inspeção </ons-list-header><br>
 	
 	<ons-list-item  modifier="tappable" >
@@ -18,21 +35,17 @@
 		</ons-col>
 	 </ons-row>
 	</ons-list-item>
+
 	
-	<ons-list-item modifier="tappable">
-	  <label class="checkbox checkbox--list-item">
-		<input type="checkbox" ng-model="exibircodigonorma" ng-change="exibircodigonormachange()" >
-		<div class="checkbox__checkmark checkbox--list-item__checkmark"></div>
-		Exibir código norma
-	  </label>
-	  
-	</ons-list-item>
-	<ons-list-item modifier="tappable">
-	  <label class="checkbox checkbox--list-item">
-		<input type="checkbox" ng-model="exibirnumerador" ng-change="exibirnumeradorchange()">
-		<div class="checkbox__checkmark checkbox--list-item__checkmark"></div>
-		Exibir numerador
-	  </label>
+	<ons-list-item  ng-click="editaChecklist()" modifier="chevron" >	
+		<ons-row>
+			<ons-col width=15%>
+				<span>&nbsp; <ons-icon icon="fa-edit"> &nbsp; </span>
+				</ons-col>
+				<ons-col width=85%>
+					Editar Checklist<br>
+			</ons-col>						
+		</ons-row>
 	</ons-list-item>
 	
 	<ons-list-item  ng-click="personalizaChecklist()" modifier="chevron" >	
@@ -41,12 +54,12 @@
 				<span>&nbsp; <ons-icon icon="list-ol"> &nbsp; </span>
 				</ons-col>
 				<ons-col width=85%>
-					Personalizar Checklist<br>
+					Personalizar Seções Checklist<br>
 			</ons-col>						
 		</ons-row>
 	</ons-list-item>
 
-	<ons-list-item  ng-click="atualizaservidor()" modifier="chevron" class="lista_cinza">	
+	<ons-list-item  ng-click="atualizaservidor()" modifier="chevron">	
 		<ons-row>
 			<ons-col width=15%>
 				<span>&nbsp; <ons-icon icon="fa-upload"> &nbsp; </span>
@@ -57,7 +70,7 @@
 			</ons-col>						
 		</ons-row>
 	</ons-list-item>
-	<ons-list-item  ng-click="apagachecklist();" modifier="chevron" class="lista_vermelha" >
+	<ons-list-item  ng-click="apagachecklist();" modifier="chevron" >
 		<ons-row>
 			<ons-col width=15%>
 				<span>&nbsp; <ons-icon icon="fa-trash-o"></span>
@@ -87,12 +100,12 @@
 		</ons-row>
 	</ons-list-item>
 
-	<ons-list-item  ng-click="clonasecao()" modifier="chevron" class="lista_cinza">
+	<ons-list-item  ng-click="clonasecao()" modifier="chevron" >
 		<ons-row>
-			<ons-col width=12%>
+			<ons-col width=15%>
 				<span>&nbsp;<ons-icon icon="ion-ios-browsers-outline"></span>
 			</ons-col>
-			<ons-col width=88%>
+			<ons-col width=85%>
 					Duplicar Seção
 			</ons-col>						
 		</ons-row>
@@ -149,7 +162,7 @@
 		</ons-row> 
 	</ons-list-item>-->	
 	
-	<ons-list-item  ng-click="apagasecao();" modifier="chevron" class="lista_vermelha" >
+	<ons-list-item  ng-click="apagasecao();" modifier="chevron" >
 		<ons-row>
 			<ons-col width=15%>
 				<span>&nbsp; <ons-icon icon="fa-trash-o"></span>
