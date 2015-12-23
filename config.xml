@@ -10,7 +10,7 @@
 	</gap:config-file>
 	
 	
-    <name>GNRX 1.116 </name>
+    <name>GNRX 1.120 </name>
 	<icon src="icon.png" />
 	<gap:splash src="splash.png" />
 	
@@ -36,9 +36,7 @@
 	<gap:plugin name="com.aserputko.speech.speechrecognition" version="0.1.0" />
 	<preference name="ChaveSpeech" value="1d05de58aef3c70e1a0072c5afc456ae" />
 	<gap:plugin name="org.li8.inappbrowser" version="0.1" />
-	
-	
-	
-	
+	<gap:plugin name="org.devgeeks.canvas2imageplugin" spec="0.6.0" source="pgb" />
+
 
 </widget>

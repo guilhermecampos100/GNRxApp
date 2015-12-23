@@ -32,13 +32,12 @@
   height=100%;
 }
 
-.lista_verde {
- /*  background-color: #aaffaa */
-  background-color: #FFF700; 
+.lista_cinza {
+ /*  background-color: lightgreen; */
+  background-color: #dddddd; 
   width=100%;
   height=100%;
 }
-
 
 .linkglo {
 color: blue;
@@ -47,28 +46,31 @@ text-decoration: underline;
 </style>
 
 	<ons-list >
-	
+		<!-- ASSOCIAR NORMA -->
 		<ons-list-item class="lista_azulclaro" ng-show="associarNorma">
-		<font style="font-size:11px;">
+			<font style="font-size:11px;">
 			Definindo o código da NR correto para {{codigoAssociar}} {{observacaoAssociar}}<br>
 			Navegue nas seções e escolha um item da norma para associar, clicando em "associar norma"<br></font>
 			<button ng-click="cancelarAssociar();" class='btn btn-xs' style='background-color:lightgrey; color:black; font-size:10px;'> &nbsp; Cancelar &nbsp;  </button>
 		</ons-list-item>
-	
+		<!-- ASSOCIAR NORMA FIM -->
+		<!-- LINHA DO BUSCAR -->
 		<ons-list-item class="lista_cinza">
-		<ons-row>
-			<ons-col width=15%> <section><center>
-				<span><font style="font-size: 13px"> &nbsp; <ons-icon icon="fa-search"> &nbsp; </font></span></center> </section>
-			</ons-col>
-			<ons-col width=85%>
-					<input name=busca ng-model=busca style="width: 40%"> <button ng-click="buscar()">buscar</button> <span style="float: right; font-size:14px; color:#1284ff;"> <span ng-click="refresca()">	<ons-icon icon="fa-refresh"></span> &nbsp; <span ng-click="VoltaTopo()"> <ons-icon icon="fa-home"> </span></span> &nbsp;
-			</ons-col>						
-		</ons-row>
-	</ons-list-item>
-	
+			<ons-row>
+			
+				<ons-col width=15%> <section><center>
+					<span><font style="font-size: 13px"> &nbsp; <ons-icon icon="fa-search"> &nbsp; </font></span></center> </section>
+				</ons-col>
+				<ons-col width=85%>
+						<input name=busca ng-model=busca style="width: 40%"> <button ng-click="buscar()">buscar</button> <span style="float: right; font-size:14px; color:#1284ff;"> <span ng-click="refresca()">	<ons-icon icon="fa-refresh"></span> &nbsp; <span ng-click="VoltaTopo()"> <ons-icon icon="fa-home"> </span></span> &nbsp;
+				</ons-col>						
+			</ons-row>
+		</ons-list-item>
+	<!-- LINHA DO BUSCAR FIM-->
 	<ons-list-item ng-show="nenhumItemEncontrado"> Nenhum item encontrado.
 	</ons-list-item>
-	<ons-list-item  name={{secao.codigo}} modifier="chevron" class="{{classelista(secao.tipo, secao.entidade)}}"  ng-repeat="secao in secoes track by $index" >
+	<!-- SECOES E ITENS-->
+	<ons-list-item  name={{secao.codigo}} modifier="chevron" class="{{classelista(secao.tipo, secao.entidade, secao.codigo, index$, secao)}}"  ng-repeat="secao in secoes track by $index" >
 		<ons-row>
 			<ons-col width=15%>
 			    <section><center>
@@ -104,8 +106,7 @@ text-decoration: underline;
 				</font>
                 </section>
 			</ons-col>	
-<!-- ASSOCIAR NORMA -->
-
+		<!-- ASSOCIAR NORMA -->
 			<ons-col width=75% ng-show="associarNorma" >
 			    <section><font style="font-size:14px">
 				<!-- INFO -->
@@ -119,7 +120,7 @@ text-decoration: underline;
 				</font>
                 </section>
 			</ons-col>	
-			
+			<!-- ASSOCIAR NORMA FIM-->
 			
 			<ons-col width=9%>
 			    <section>

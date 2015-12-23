@@ -2,12 +2,18 @@
     
    <ons-popover direction="up down" cancelable>
     <ons-list>
-      <ons-list-item modifier="tappable" ng-click="tirafoto('camera');">Foto</ons-list-item>
-	  <ons-list-item modifier="tappable" ng-click="tirafoto('galeria');">Foto da Galeria</ons-list-item>
+	  <ons-list-item modifier="tappable"  ng-click="entraItem();">Entrar</ons-list-item>	
+      <ons-list-item modifier="tappable" >
+	  		<ons-row>
+			<ons-col width=50% ng-click="tirafoto('camera');"><font style="font-size:14px"><ons-icon icon="fa-camera" ></ons_icon> Foto </font></ons-col>
+			<ons-col width=50% ng-click="tirafoto('galeria');"><font style="font-size:14px"><ons-icon icon="fa-picture-o" ></ons_icon> Galeria</font></ons-col>
+		</ons-list-item>
+			
+
       <ons-list-item modifier="tappable" ng-click="abreObservacao();">Observacao</ons-list-item>
       <ons-list-item modifier="tappable" ng-click="abreLocal();">Local</ons-list-item>
 	  <ons-list-item modifier="tappable"  ng-click="registragps();">GPS</ons-list-item>
-	  <ons-list-item modifier="tappable"  ng-click="entraItem();">Entra no Item</ons-list-item>
+
     </ons-list>
   </ons-popover>
  </ons-page>

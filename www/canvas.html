@@ -1,0 +1,29 @@
+<ons-page ng-controller="CanvasController">
+<style>
+.vermelho {background-color:red; color:white;}
+.vermelhoclaro {background-color:#ffaaaa; color:white; }
+.verde {background-color:green; color:white;}
+.verdeclaro {background-color:#ccffcc; color:white; }	
+
+</style> 
+     <ons-toolbar>
+    <div class="left">
+	<ons-back-button>Voltar</ons-back-button></div>
+
+	</div>
+	</ons-toolbar>
+	
+
+<a class='button button-energized' ng-click='clearCanvas()'>Limpar</a> 
+<a class='button button-balanced' ng-click='saveCanvas()'>Salvar</a> 
+<a class='button button-balanced {{classevermelho}}' ng-click='mudaCor("red")'><ons-icon icon="fa-pencil"></a> 
+<a class='button button-balanced {{classeverde}}' ng-click='mudaCor("green")'><ons-icon icon="fa-pencil"></a> &nbsp; 
+Escolha o pincel vermelho ou verde para desenhar na foto<br>
+	
+<canvas id='signatureCanvas' width='400' height='250' style='border: 1px solid black;'></canvas>
+<div class='button-bar'>
+
+</div>
+
+ 
+ </ons-page>

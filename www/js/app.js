@@ -39,7 +39,136 @@ var app = {
         $httpProvider.defaults.cache = false;
 
     }]);
+
+
+	  // CANVAS: Canvas Controller  **********************************
+	  // ***********************************************************
+	app.controller('CanvasController', function($scope, $rootScope, $http, transformRequestAsFormPost) {
+
 	
+		var PERSISTENT;
+		if (typeof LocalFileSystem === 'undefined') {
+			PERSISTENT = window.PERSISTENT;
+		} else {
+			PERSISTENT = LocalFileSystem.PERSISTENT ;
+		}
+		
+
+		var fs;
+		window.requestFileSystem(PERSISTENT, 0, 
+			function(fileSystem) {
+				fs = fileSystem
+			}
+			, deuerro);
+	
+		var db = window.openDatabase("MeuBanco", "1.0", "Cordova Demo", 200000);
+				
+		function gravaFoto(myCanvasId) {
+			var canvas2ImagePlugin = window.canvas2ImagePlugin;
+			canvas2ImagePlugin.saveImageDataToLibrary(
+				function(msg){
+					alert(msg);
+					var nomeArquivoCompleto = "file://" + msg;
+					setTimeout(function() {window.resolveLocalFileSystemURL(nomeArquivoCompleto, gotFileEntry, deuerro); }, 100)
+				}, 
+				function(err){
+					console.log(err);
+				}, 
+				myCanvasId,
+				'.jpg',
+				80
+			);	
+		}
+
+		// MOVE A FOTO PARA O DIRETORIO PERMANENTE		
+		function gotFileEntry(fileEntry) {
+			fileEntry.moveTo(fs.root, fileEntry.name , fsSuccess, deuerro);
+		}
+		
+		function fsSuccess(fileEntry) {
+			var novoNome = fileEntry.name;
+			db.transaction(function(tx) {
+				tx.executeSql("update checklist_fotos set nome =?, atualizouservidor = 0 where token=? and nome=?", [novoNome, $rootScope.tokenGlobal, nomeFoto], function(tx, res) {
+					$rootScope.tevealteracaoitem = true;
+					$scope.MeuNavigator.popPage({onTransitionEnd : function() {
+						$scope.MeuNavigator.replacePage('itens.html', {secaoPai: $rootScope.secaoPai, animation : 'none' } );
+					}});
+				});
+			}); 			
+		}
+		
+		function deuerro(a) {
+			alert('erro: ' + JSON.stringify(a));
+		}
+		
+
+	$scope.sair = function() {
+		if ($rootScope.tevealteracaoitem == true) {
+			$scope.MeuNavigator.popPage({onTransitionEnd : function() {
+				$scope.MeuNavigator.replacePage('itens.html', {secaoPai: $rootScope.secaoPai, animation : 'none' } );
+			}})
+		}
+		else {
+			$scope.MeuNavigator.popPage();
+		}
+			
+		
+	}	
+		
+	base_image = new Image();
+	base_image.src = $rootScope.fotocanvas	
+	$scope.fotocanvas = $rootScope.fotocanvas
+	var nomeFoto = $rootScope.fotocanvas.split('/').pop(); 
+
+	var canvas = document.getElementById('signatureCanvas');
+
+	canvas.width =  base_image.width
+	canvas.height =  base_image.height
+
+	var signaturePad = new SignaturePad(canvas);
+
+	signaturePad.penColor = 'black';
+	$scope.classevermelho = 'vermelhoclaro';
+	$scope.classeverde = 'verdeclaro';	
+	signaturePad.off();	
+
+	context = canvas.getContext('2d');
+
+	context.drawImage(base_image, 0, 0, base_image.width, base_image.height);
+	
+	$scope.mudaCor = function(cor) {
+		if (cor == signaturePad.penColor) { 
+		 	$scope.classevermelho = 'vermelhoclaro';
+			$scope.classeverde = 'verdeclaro';
+			signaturePad.penColor = 'black';
+			signaturePad.off();
+		} else {
+			signaturePad.penColor = cor;
+			signaturePad.on();
+			if (cor == 'red' ) {
+				$scope.classevermelho = 'vermelho';
+				$scope.classeverde = 'verdeclaro';
+			}
+			if (cor == 'green') {
+				$scope.classevermelho = 'vermelhoclaro';
+				$scope.classeverde = 'verde';
+			}	
+		}		
+	}	
+	 
+	$scope.clearCanvas = function() {
+		signaturePad.clear();
+		context.drawImage(base_image, 0, 0, base_image.width, base_image.height);
+	}
+
+	$scope.saveCanvas = function() {
+		var sigImg = signaturePad.toDataURL();
+		$scope.signature = sigImg;
+		gravaFoto(canvas)
+	}
+
+	});
+
  
 	  // LOGIN: Login Controller  **********************************
 	  // ***********************************************************
@@ -486,6 +615,7 @@ var app = {
 			$rootScope.busca = ''
 			var estechecklist = $scope.checklists[indice];
 			$rootScope.local = estechecklist.local;
+			$rootScope.ultimolocal = estechecklist.local;
 			$rootScope.tokenGlobal = estechecklist.token;
 			$rootScope.nomechecklist = estechecklist.nome;
 			
@@ -519,7 +649,8 @@ var app = {
 							for (var i=0; i < results.rows.length; i++){
 								row = results.rows.item(i);
 								row.descricaocomglossario = row.descricao.replace("<(glo", "<a id=linkglossario class=linkglo ng-click=showglossario($event,");
-								row.desabilitadaaux = 1;
+								row.desabilitadaaux = row.desabilitada;
+								if (row.desabilitadaaux == undefined) { row.desabilitadaaux = 0 }
 								$scope.secoes.push(row);
 							}
 							if (results.rows.length == 0) {
@@ -779,7 +910,7 @@ var app = {
 			$scope.local = $scope.secoes[$scope.indice].local;
 			if ($scope.local == undefined || $scope.local == "") {
 				// SE NAO FOI GRAVADO UM LOCAL ESPECIFICO ENTAO PEGA DO ROOTSCOPE
-				$scope.local = $rootScope.local
+				$scope.local = $rootScope.ultimolocal
 			}	
 			
 			$scope.codigoolocal = $scope.secoes[$scope.indice].codigo;
@@ -1016,7 +1147,7 @@ var app = {
 			$scope.$apply();	
 		};	
 		// CLASSE LISTA		
-		$scope.classelista = function(tipo, entidade) {
+		$scope.classelista = function(tipo, entidade, codigo, index, secao) {
 			if (tipo == "info")
 					return 'item lista_azulclaro ng-scope list__item ons-list-item-inner list__item--chevron';
 			if (tipo == "secao")
@@ -1026,7 +1157,7 @@ var app = {
 					return 'item lista_amarela ng-scope list__item ons-list-item-inner list__item--chevron';
 			if (tipo == "item")
 				if (entidade != undefined && entidade > 0) 
-					return 'item lista_verdeclaro ng-scope list__item ons-list-item-inner list__item--chevron';
+					return 'item lista_cinza ng-scope list__item ons-list-item-inner list__item--chevron';
 				else
 					return 'item item ng-scope list__item ons-list-item-inner list__item--chevron';
 		}
@@ -2025,6 +2156,11 @@ var app = {
 	// **************************************************
     app.controller('ItensController', function($interval, $scope,  $sce, $compile, $rootScope, $http) {
 		
+		$scope.entraCanvas = function(fotourl) {
+			$rootScope.fotocanvas = fotourl;
+			MeuNavigator.pushPage('canvas.html');
+		}
+		
 		if ($rootScope.tokenGlobal == undefined) {
 			alert('Escolha um checklist')
 			tabbar.loadPage("escolhechecklist.html")
@@ -2054,6 +2190,7 @@ var app = {
 			$rootScope.observacaoAssociar = $scope.secaoPai.obs;
 			$scope.VoltaTopo()
 		}
+		
 		
 		// DUPLICAR
 		$scope.duplicar = function() {
@@ -2114,6 +2251,7 @@ var app = {
 		}
 		else {
 			$scope.secaoPai = page.options.secaoPai;
+			$rootScope.secaoPai = $scope.secaoPai;
 			if (page.options.secaoAvo != undefined) {
 				$rootScope.secaoAvo = page.options.secaoAvo;
 			}
@@ -2240,11 +2378,13 @@ var app = {
 		// ATIVA INSERÇÃO DE LOCAL
 		$scope.inserirlocal = function() {
 			$scope.inserindolocal = true;
-			if ($scope.txtlocal == '') {
-				$scope.local = $scope.txtlocal;
+			if ($scope.txtlocal == $rootScope.local) {
+				// se for igual (ainda nao foi atualizado) entao sugere o ultimo local
+				$scope.local = $scope.ultimolocal;
 			}
 			else {
-				$scope.local = $rootScope.local
+				// se for diferente entao nao sugere. Pega o local que ja foi customizado
+				$scope.local = $scope.txtlocal;
 			}
 		}
 		
@@ -2262,7 +2402,12 @@ var app = {
 			});
 			$scope.inserindolocal = false;
 			$scope.txtlocal = $scope.local;
-			$rootScope.local = $scope.local;
+			$rootScope.ultimolocal = $scope.local;
+			$scope.corlocal = "lightgrey";
+			if ($scope.txtlocal != $rootScope.local) {
+				$scope.corlocal = "black"
+			}			
+			
 			// altera o rootScope.local para sugerir este local para o próximo registro
 			setTimeout(function(){ $scope.$apply(); }, 300);
 			// por algum motivo se nao der o timeout o botao fica clareado como se estivesse desabilitado
@@ -2282,8 +2427,7 @@ var app = {
 		ons.createPopover('popover.html',{parentScope: $scope}).then(function(popover) {
 			$scope.popover = popover;
 		});
-		  
-		
+		  		
 		var PERSISTENT
 		if (typeof LocalFileSystem === 'undefined') {
 			PERSISTENT = window.PERSISTENT;
@@ -2309,14 +2453,24 @@ var app = {
 						$scope.txtobservacao = results.rows.item(0).obs;
 						$scope.observacao = results.rows.item(0).obs;
 						$scope.txtlocal = results.rows.item(0).local;
-						$scope.local = results.rows.item(0).local;					
+						$scope.txtlocal = results.rows.item(0).local;					
 						$scope.latitude = results.rows.item(0).latitude;
 						$scope.longitude = results.rows.item(0).longitude;
 						$scope.conformidade = results.rows.item(0).conforme;
+						
+						$scope.corconformidade = "black";
+						if ($scope.conformidade == "sim") { $scope.corconformidade = "green" }
+						if ($scope.conformidade == "nao") {	$scope.corconformidade = "red"}
 
-						if ($scope.local == undefined || $scope.local == "") {
-							$scope.local = $rootScope.local
+						if ($scope.txtlocal == undefined || $scope.txtlocal == "") {
+							$scope.txtlocal = $rootScope.local
 						}
+						
+						$scope.corlocal = "lightgrey";
+						if ($scope.txtlocal != $rootScope.local) {
+							$scope.corlocal = "black"
+						}
+						
 						if ($scope.txtobservacao != undefined && $scope.txtobservacao != '')
 							$scope.cor_icone_obs = "#1284ff";
 						else
@@ -2325,6 +2479,7 @@ var app = {
 						tx.executeSql("Select * from checklist_fotos where token=? and codigo=? and ifnull(entidade,0)=?", [$scope.token, $scope.secaoPai.codigo, entidade], function(tx, results) {
 							for (var i=0;i<results.rows.length;i++) {
 								var fotoURL = fs.root.nativeURL + results.rows.item(i).nome;
+								$rootScope.imgUrl = fotoURL;
 								var foto = {url: fotoURL ,observacao: results.rows.item(i).obs};
 								$scope.fotos.push(foto);
 								$scope.$apply();
@@ -2346,8 +2501,30 @@ var app = {
 				});
 			});
 		};
-		
-		
+
+		// MUDA CONFORMIDADE
+		$scope.mudaconformidade = function() {
+			var novaconformidade = "sim"
+			$scope.corconformidade = "green"
+			
+			if ($scope.conformidade == "sim" ) {
+				novaconformidade = "nao"
+				$scope.corconformidade = "red"
+				}
+				
+			if ($scope.conformidade == "nao" ) {
+				novaconformidade = ""
+				$scope.corconformidade = "black" 
+				}
+			$scope.conformidade = novaconformidade;
+			db.transaction(function(tx) {
+				tx.executeSql("update checklist_gui set conforme=?, atualizouservidor = 0 where token=? and codigo=? and ifnull(entidade,0)=?", [novaconformidade, $rootScope.tokenGlobal, $scope.secaoPai.codigo, entidade], function(tx, res) {
+					$rootScope.tevealteracaoitem = true;
+					//alert('insert conformidade ok');
+				});
+			});
+		};
+
 		//ACAO
 		$scope.acao = function(acao, param_url, param_observacao) { 
 			if (acao == 'observacao') {
@@ -2369,6 +2546,9 @@ var app = {
 					$scope.tirafoto(param_url);
 				}
 			}
+			else if (acao == 'desenharfoto') {
+				$scope.entraCanvas(param_url);
+			}	
 			else if (acao == 'apagarfoto') {
 				var result = confirm("Confirma deleção?");
 				if (result) {
@@ -2882,5 +3062,7 @@ app.directive('ngBlur', ['$parse', function($parse) {
     });
   }
 }]);
+
+
 
 })();

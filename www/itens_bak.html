@@ -24,33 +24,46 @@
 	<ons-list style="border-bottom: 0px;">
 	
 	<ons-list-item id="tituloitem">
-		<ons-row style="line-height: normal;">
-			<ons-col width=12%> 
-			<span ng-click="mudaconformidade()">
-			<button ng-show="conformidade == undefined || conformidade == '' " class='btn btn-xs' style='background-color:lightgrey; color:black; font-size:13px;'> &nbsp; <i class='fa fa-question'> </i>  &nbsp;  </button>
-			<button ng-show="conformidade == 'sim' " class='btn btn-xs' style='background-color:green; color:white; font-size:13px;'>sim</button>
-			<button ng-show="conformidade == 'nao' " class='btn btn-xs' style='background-color:red; color:white; font-size:13px;'>não</button>
-			</span> 
-			</ons-col>
-			
-			
-			<ons-col width=88%>
+		<ons-row>
+			<ons-col>
 				<b>{{secaoPai.codigo}} <span compile="descricaoitem"></span></b><br>
-				&nbsp; <a id="imagemanexa" href="#" ng-show="secao.imagemanexa" ng-click="abrepagina(secao.imagemanexa);"> veja imagem </a> <br>
-
-				
-				<ons-button modifier="quiet" ng-click="duplicar()" ng-show="!podeExcluir && !criandoNovoItemAvulso" > <ons-icon icon="ion-ios-browsers-outline" size="13px" fixed-width="false"></ons-icon> Duplicar </ons-button>
-				
-				<ons-button modifier="quiet" ng-click="associarNorma()" ng-show="podeExcluir && !criandoNovoItemAvulso" >
-				<ons-icon icon="hand-o-right" size="13px" fixed-width="false"></ons-icon> Associar norma </ons-button>
-				
-				<ons-button modifier="quiet" style="color:red;" ng-click="excluirItem()" ng-show="podeExcluir && !criandoNovoItemAvulso" > <ons-icon icon="fa-trash-o" size="13px" fixed-width="false"></ons-icon> Excluir </ons-button>			
+				&nbsp; <a id="imagemanexa" href="#" ng-show="secao.imagemanexa" ng-click="abrepagina(secao.imagemanexa);"> veja imagem </a> 
+				&nbsp;<button class="btn btn-xs" ng-click="duplicar()" ng-show="!podeExcluir && !criandoNovoItemAvulso" > <ons-icon icon="ion-ios-browsers-outline" size="13px" fixed-width="false"></ons-icon> Duplicar </button>
+				&nbsp;<button class="btn btn-xs" style="background-color:lightblue;" ng-click="associarNorma()" ng-show="podeExcluir && !criandoNovoItemAvulso" > <ons-icon icon="fa-trash-o" size="13px" fixed-width="false"></ons-icon> Associar norma </button>
+				&nbsp;<button class="btn btn-xs" style="background-color:red;" ng-click="excluirItem()" ng-show="podeExcluir && !criandoNovoItemAvulso" > <ons-icon icon="fa-trash-o" size="13px" fixed-width="false"></ons-icon> Excluir </button>			
 			</ons-col>						
 		</ons-row>
 	</ons-list-item>
 	
 
-	<ons-list-header> Observação: </ons-list-header>	
+	
+	    <ons-list-item modifier="tappable">
+	<section ng-show="criandoNovoItemAvulso == false">
+		<ons-list-header>Conformidade</ons-list-header>
+		<table><td>
+          <label class="radio-button radio-button--list-item">
+            <input type="radio" name="conformidade" ng-model="conformidade" value="sim" ng-click="verificavalor()">
+            <div class="radio-button__checkmark radio-button--list-item__checkmark"></div>
+            Sim
+          </label>   </td><td>
+		
+		  <label class="radio-button radio-button--list-item">
+            <input type="radio" name="conformidade" ng-model="conformidade" value="nao" ng-click="verificavalor()">
+            <div class="radio-button__checkmark radio-button--list-item__checkmark"></div>
+            Não
+          </label>  <!--  </td><td>
+		  <label class="radio-button radio-button--list-item">
+            <input type="radio" name="conformidade" ng-model="conformidade" value="nao se aplica" ng-click="verificavalor()">
+            <div class="radio-button__checkmark radio-button--list-item__checkmark"></div>
+            Não Aplica
+          </label>   --> </td><td>
+          <label class="radio-button radio-button--list-item">
+            <input type="radio" name="conformidade" ng-model="conformidade" value="" ng-click="verificavalor()">
+            <div class="radio-button__checkmark radio-button--list-item__checkmark"></div>
+            N/R
+          </label>   </td></table>	 	  
+	</section>	  
+	<ons-list-header> Observação:  <span><ons-icon icon="plus-square-o" size="13px" fixed-width="false" ng-show="txtobservacao == undefined || txtobsevacao == ''" ng-click="inserirobservacao()" > </ons-icon></ons-list-header>	
 	
 		<ons-list-item ng-show="inserindoobs == true">
 			<ons-row>
@@ -70,21 +83,20 @@
 		
 		<ons-list-item ng-show="inserindoobs == false && txtobservacao != undefined && txtobsevacao != ''"  ng-click="inserirobservacao()" >		
 			<ons-row style="line-height: normal;">
-				<ons-col width=1%> &nbsp;
+				<ons-col width=5%> &nbsp;
 				</ons-col>
-				<ons-col width=99%>
-				<span style="color:{{corconformidade}}">
-					<b>{{txtobservacao}}</b></span>
+				<ons-col width=95% >
+					<b>{{txtobservacao}}</b>
 				</ons-col>
 			</ons-row>   
 		</ons-list-item>	
 		
-		<ons-list-item modifier="tappable" ng-show="inserindoobs == false && (txtobservacao == undefined || txtobsevacao == '')"  ng-click="inserirobservacao()" >
+		<ons-list-item modifier="tappable" ng-show="inserindoobs == false && 1==2"  ng-click="inserirobservacao()" >
 			<ons-row ng-show="true">
-				<ons-col width=1%>
+				<ons-col width=5%>
 				</ons-col>
-				<ons-col width=99%>
-					<ons-button modifier="quiet"> <ons-icon icon="fa-comment" size="13px" fixed-width="false"></ons-icon> Inserir Observação </ons-button>
+				<ons-col width=95%>
+					<button class="btn btn-xs"> <ons-icon icon="fa-comment" size="13px" fixed-width="false"></ons-icon> Insere/Altera Observação </button>
 				</ons-col>						
 			</ons-row>			
 		</ons-list-item>
@@ -98,7 +110,7 @@
 			<ons-row>
 				<ons-col width="100%">
 					<br>
-					<input type=text  name="local" ng-model="local" size=40><br><br>
+					<input type=text  name="local" ng-model="local"size=40><br><br>
 				</ons-col>
 			</ons-row>
 			<ons-row>
@@ -106,20 +118,33 @@
 					<button class="button"  style="background-color:#cccccc; font-size:14px;" ng-click="limpalocal()"> <ons-icon icon="fa-eraser"></ons-icon> </button>&nbsp;<button name="btnregistrar" id="btnregistrar" class="button" ng-click="gravalocal()">&nbsp; Gravar &nbsp;</button>&nbsp;
 			</ons-row>
         </ons-list-item>
-			
 		
-		<ons-list-item modifier="tappable" ng-show="inserindolocal == false">
+		<ons-list-item ng-show="inserindolocal == false && txtlocal != undefined && txtlocal != ''"  ng-click="inserirlocal()" >		
 			<ons-row style="line-height: normal;">
-				<ons-col width=1%>
+				<ons-col width=5%> &nbsp;
 				</ons-col>
-				<ons-col width=99%>
-					<span  ng-click="inserirlocal()" style="color:{{corlocal}}">
-					<b>{{txtlocal}}</b></span> &nbsp; 
-					<ons-button modifier="quiet" ng-click="acao('gps','')" > Marcar GPS </ons-button>
+				<ons-col width=95%>
+					<b>{{txtlocal}}</b>
+				</ons-col>
+			</ons-row>   
+		</ons-list-item>	
+		
+		<ons-list-item modifier="tappable" ng-show="inserindolocal == false"  ng-click="inserirlocal()" >
+			<ons-row ng-show="true">
+				<ons-col width=5%>
+				</ons-col>
+				<ons-col width=95%>
+					<button class="btn btn-xs">Insere/Altera Local </button>
 				</ons-col>						
 			</ons-row>			
 		</ons-list-item>	
 	
+
+		<ons-row ng-show="false">
+			<ons-col width="100%"><br>
+				&nbsp; <input type=text name="local" ng-model="local" size=40 ngblur="gravalocal()"> &nbsp; <button class='btn btn-xs' style='background-color:lightgrey; color:black; font-size:12px;' ng-click="gravalocal()"> alterar</button>
+			</ons-col>
+		</ons-row>
 
 		<ons-list-item modifier="tappable" >
 			<ons-row>
@@ -130,23 +155,26 @@
 					</span></center>
 				</ons-col>
 				<ons-col width=95%>
-					<span ng-show="latitude != undefined" style="font-size: small;"> Lat: {{latitude}} Lon: {{longitude}} </span>
+						<button class="btn btn-xs" ng-click="acao('gps','')" > Marcar Geolocalização (GPS) </button><span ng-show="latitude != undefined" style="font-size: small;"> Lat: {{latitude}} Lon: {{longitude}} </span>
 				</ons-col>						
 			</ons-row>
 		</ons-list-item>	
 
 
+
+	
 		<ons-list-header>Fotos</ons-list-header>
+
 
 		<ons-list-item modifier="tappable" >
 			<ons-row>
-				<ons-col width=1%><center>
+				<ons-col width=5%><center>
 					<span style="color: {{cor_icone_foto()}}" ng-show="false">
 					
 					</span></center>
 				</ons-col>
-				<ons-col width=99%>
-						<ons-button modifier="quiet" ng-click="acao('fotos','','')" > <ons-icon icon="fa-camera" size="13px" fixed-width="false">	</ons-icon> Registrar nova foto</button
+				<ons-col width=95%>
+						<button class="btn btn-xs" ng-click="acao('fotos','','')" > <ons-icon icon="fa-camera" size="13px" fixed-width="false">	</ons-icon> Registrar nova foto</button
 				</ons-col>						
 			</ons-row>
 		</ons-list-item>
